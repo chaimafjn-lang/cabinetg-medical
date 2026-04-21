@@ -1,4 +1,4 @@
-javapackage com.fst.cabinet.config;
+package com.fst.cabinet.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
