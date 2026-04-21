@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Liste des Patients</title>
+    <link rel="stylesheet" 
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-4">
+
+    <!-- Titre et bouton ajouter -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>👥 Liste des Patients</h2>
+        <a th:href="@{/patients/nouveau}" class="btn btn-primary">
+            + Ajouter un patient
+        </a>
+    </div>
+
+    <!-- Barre de recherche -->
+    <form th:action="@{/patients}" method="get" class="mb-3">
+        <div class="input-group">
+            <input type="text" name="recherche" class="form-control"
+                   placeholder="Rechercher par nom, CIN ou téléphone..."
+                   th:value="${recherche}">
+            <button type="submit" class="btn btn-outline-primary">
+                🔍 Rechercher
+            </button>
+            <a th:href="@{/patients}" class="btn btn-outline-secondary">
+                Effacer
+            </a>
+        </div>
+    </form>
+
+    <!-- Tableau des patients -->
+    <table class="table table-bordered table-hover">
+        <thead class="table-primary">
+            <tr>
+                <th>CIN</th>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Téléphone</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- th:each = boucle sur la liste des patients -->
+            <tr th:each="patient : ${patients}">
+                <td th:text="${patient.cin}"></td>
+                <td th:text="${patient.nom}"></td>
+                <td th:text="${patient.prenom}"></td>
+                <td th:text="${patient.telephone}"></td>
+                <td th:text="${patient.email}"></td>
+                <td>
+                    <!-- Bouton fiche -->
+                    <a th:href="@{/patients/fiche/{id}(id=${patient.id})}" 
+                       class="btn btn-sm btn-info">👁 Fiche</a>
+                    <!-- Bouton modifier -->
+                    <a th:href="@{/patients/modifier/{id}(id=${patient.id})}" 
+                       class="btn btn-sm btn-warning">✏ Modifier</a>
+                    <!-- Bouton supprimer -->
+                    <a th:href="@{/patients/supprimer/{id}(id=${patient.id})}"
+                       class="btn btn-sm btn-danger"
+                       onclick="return confirm('Supprimer ce patient ?')">
+                       🗑 Supprimer
+                    </a>
+                </td>
+            </tr>
+            <!-- Si aucun patient trouvé -->
+            <tr th:if="${#lists.isEmpty(patients)}">
+                <td colspan="6" class="text-center">Aucun patient trouvé</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Retour dashboard -->
+    <a th:href="@{/dashboard}" class="btn btn-secondary">
+        ← Retour Dashboard
+    </a>
+
+</div>
+</body>
+</html>
