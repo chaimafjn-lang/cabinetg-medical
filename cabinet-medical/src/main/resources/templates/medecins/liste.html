@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Liste des Médecins</title>
+    <link rel="stylesheet" 
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-4">
+
+    <!-- Titre et bouton ajouter -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>👨‍⚕️ Liste des Médecins</h2>
+        <a th:href="@{/medecins/nouveau}" class="btn btn-primary">
+            + Ajouter un médecin
+        </a>
+    </div>
+
+    <!-- Barre de recherche -->
+    <form th:action="@{/medecins}" method="get" class="mb-3">
+        <div class="input-group">
+            <input type="text" name="recherche" class="form-control"
+                   placeholder="Rechercher par nom, prénom ou spécialité..."
+                   th:value="${recherche}">
+            <button type="submit" class="btn btn-outline-primary">
+                🔍 Rechercher
+            </button>
+            <a th:href="@{/medecins}" class="btn btn-outline-secondary">
+                Effacer
+            </a>
+        </div>
+    </form>
+
+    <!-- Tableau des médecins -->
+    <table class="table table-bordered table-hover">
+        <thead class="table-success">
+            <tr>
+                <th>N° Ordre</th>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Spécialité</th>
+                <th>Téléphone</th>
+                <th>Statut</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="medecin : ${medecins}">
+                <td th:text="${medecin.numeroOrdre}"></td>
+                <td th:text="${medecin.nom}"></td>
+                <td th:text="${medecin.prenom}"></td>
+                <td th:text="${medecin.specialite}"></td>
+                <td th:text="${medecin.telephone}"></td>
+                <td>
+                    <!-- Affiche Actif en vert ou Inactif en rouge -->
+                    <span th:if="${medecin.actif}" 
+                          class="badge bg-success">Actif</span>
+                    <span th:unless="${medecin.actif}" 
+                          class="badge bg-danger">Inactif</span>
+                </td>
+                <td>
+                    <a th:href="@{/medecins/modifier/{id}(id=${medecin.id})}" 
+                       class="btn btn-sm btn-warning">✏ Modifier</a>
+                    <a th:href="@{/medecins/supprimer/{id}(id=${medecin.id})}"
+                       class="btn btn-sm btn-danger"
+                       onclick="return confirm('Supprimer ce médecin ?')">
+                       🗑 Supprimer
+                    </a>
+                </td>
+            </tr>
+            <!-- Si aucun médecin -->
+            <tr th:if="${#lists.isEmpty(medecins)}">
+                <td colspan="7" class="text-center">Aucun médecin trouvé</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a th:href="@{/dashboard}" class="btn btn-secondary">
+        ← Retour Dashboard
+    </a>
+
+</div>
+</body>
+</html>
