@@ -5,7 +5,7 @@
 
 ---
 
-## 👥 Équipe de développement
+##  Équipe de développement
 
 | Noms:
 
@@ -15,7 +15,7 @@
 
 ---
 
-## 📋 Description du projet
+##  Description du projet
 
 Application web de gestion d'un cabinet médical développée 
 avec Spring Boot 3. Elle permet de gérer les patients, 
@@ -24,7 +24,7 @@ un système d'authentification multi-rôles.
 
 ---
 
-## 🛠️ Technologies utilisées
+##  Technologies utilisées
 
 | Couche | Technologie |
 |--------|-------------|
@@ -36,7 +36,7 @@ un système d'authentification multi-rôles.
 
 ---
 
-## ⚙️ Prérequis
+##  Prérequis
 
 Avant de lancer le projet, assurez-vous d'avoir :
 
@@ -47,7 +47,7 @@ Avant de lancer le projet, assurez-vous d'avoir :
 
 ---
 
-## 🚀 Installation et lancement
+##  Installation et lancement
 
 ### 1. Cloner le projet
 ```bash
@@ -77,17 +77,17 @@ http://localhost:8080
 
 ---
 
-## 🔐 Comptes de test
+## Comptes de test
 
-| Utilisateur | Mot de passe | Rôle |
-|-------------|--------------|------|
-| admin | password | password |
-| medecin1 | password | password |
-| secretaire1 | password | password |
+| Utilisateur | Mot de passe | 
+|-------------|--------------|
+| admin | password |
+| medecin1 | password |
+| secretaire1 | password |
 
 ---
 
-## 📁 Structure du projet
+##  Structure du projet
 src/
 ├── main/
 │   ├── java/com/fst/cabinet/
@@ -104,9 +104,9 @@ src/
 
 ---
 
-## 📊 Fonctionnalités
+##  Fonctionnalités
 
-### ✅ Fonctionnalités implémentées
+### Fonctionnalités implémentées
 
 - [x] Page d'accueil publique
 - [x] Authentification multi-rôles
@@ -119,18 +119,6 @@ src/
 - [x] Tableau de bord avec statistiques
 - [x] Recherche patients et médecins
 
-### 🔜 Fonctionnalités bonus
-
-- [ ] Calendrier hebdomadaire visuel
-- [ ] Export ordonnance en PDF
-- [ ] Notifications RDV imminents
-
----
-
-## 🗄️ Modèle de données
-Patient ──────┐
-├──── RendezVous ──── Ordonnance ──── LigneMedicament
-Medecin ──────┘
 
 ### Entités principales :
 - **Patient** : CIN, nom, prénom, date naissance, antécédents
@@ -142,7 +130,7 @@ Medecin ──────┘
 
 ---
 
-## 📅 Planning
+## Planning
 
 | Semaine | Objectifs | Statut |
 |---------|-----------|--------|
@@ -153,7 +141,7 @@ Medecin ──────┘
 
 ---
 
-## 📝 Notes importantes
+##  Notes importantes
 
 - Les migrations BDD utilisent **Flyway** 
   (pas de `ddl-auto=create`)
