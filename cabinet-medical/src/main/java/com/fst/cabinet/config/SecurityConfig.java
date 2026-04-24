@@ -22,7 +22,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(
+    SecurityFilterChain filterChain(
             HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
@@ -60,12 +60,12 @@ public class SecurityConfig {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(
+    AuthenticationManager authenticationManager(
             HttpSecurity http) throws Exception {
         AuthenticationManagerBuilder builder = http
             .getSharedObject(
