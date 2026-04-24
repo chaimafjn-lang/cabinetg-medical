@@ -73,6 +73,6 @@ public class SecurityConfig {
         builder
             .userDetailsService(userDetailsService)
             .passwordEncoder(passwordEncoder());
-        return builder.build():
+        return builder.build();
     }
 }
