@@ -5,81 +5,594 @@
     <title>Cabinet Médical</title>
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        /* NAVBAR */
+        .navbar {
+            background: linear-gradient(135deg, #1a73e8, #0d47a1) !important;
+            padding: 15px 0;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.2);
+        }
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        /* HERO */
+        .hero {
+            background: linear-gradient(135deg, #1a73e8 0%, #0d47a1 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+        }
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 400px;
+            height: 400px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+        }
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        .hero-image {
+            position: relative;
+            z-index: 2;
+        }
+        .hero-image img {
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border: 4px solid rgba(255,255,255,0.2);
+        }
+        .btn-hero-primary {
+            background: white;
+            color: #1a73e8;
+            padding: 14px 35px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            border: none;
+            transition: all 0.3s;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+        .btn-hero-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            color: #1a73e8;
+        }
+        .btn-hero-secondary {
+            background: transparent;
+            color: white;
+            padding: 14px 35px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            border: 2px solid white;
+            transition: all 0.3s;
+        }
+        .btn-hero-secondary:hover {
+            background: white;
+            color: #1a73e8;
+            transform: translateY(-3px);
+        }
+
+        /* STATS */
+        .stats-section {
+            background: white;
+            padding: 40px 0;
+            box-shadow: 0 5px 30px rgba(0,0,0,0.08);
+        }
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+            border-right: 1px solid #eee;
+        }
+        .stat-item:last-child { border-right: none; }
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #1a73e8;
+        }
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        /* SERVICES */
+        .services-section {
+            padding: 80px 0;
+            background: #f8f9fa;
+        }
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #1a1a2e;
+            margin-bottom: 10px;
+        }
+        .section-subtitle {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 50px;
+        }
+        .service-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 5px 30px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            border: none;
+            height: 100%;
+        }
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+        }
+        .service-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            font-size: 2rem;
+        }
+        .service-card h5 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 15px;
+        }
+        .service-card p {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        /* DOCTORS */
+        .doctors-section {
+            padding: 80px 0;
+            background: white;
+        }
+        .doctor-card {
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 5px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            border: none;
+        }
+        .doctor-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+        }
+        .doctor-img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+        }
+        .doctor-info {
+            padding: 20px;
+            text-align: center;
+        }
+        .doctor-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #1a1a2e;
+        }
+        .doctor-specialty {
+            color: #1a73e8;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* CTA */
+        .cta-section {
+            background: linear-gradient(135deg, #1a73e8, #0d47a1);
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        /* FOOTER */
+        footer {
+            background: #1a1a2e;
+            color: #aaa;
+            padding: 40px 0 20px;
+        }
+        footer h6 {
+            color: white;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        footer a {
+            color: #aaa;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 8px;
+            transition: color 0.3s;
+        }
+        footer a:hover { color: #1a73e8; }
+        .footer-bottom {
+            border-top: 1px solid #333;
+            padding-top: 20px;
+            margin-top: 30px;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+    </style>
 </head>
 <body>
 
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
     <div class="container">
-        <a class="navbar-brand" href="#">
-            🏥 Cabinet Médical
+        <a class="navbar-brand text-white" href="#">
+            <i class="fas fa-hospital-user me-2"></i>Cabinet Médical
         </a>
-        <div class="ms-auto">
-            <a th:href="@{/login}" 
-               class="btn btn-outline-light me-2">
-                🔐 Se connecter
-            </a>
-            <a th:href="@{/register}" 
-               class="btn btn-light">
-                📝 S'inscrire
-            </a>
+        <button class="navbar-toggler" type="button" 
+                data-bs-toggle="collapse" 
+                data-bs-target="#navMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navMenu">
+            <ul class="navbar-nav me-auto ms-4">
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="#services">
+                        Services
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="#medecins">
+                        Médecins
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="#contact">
+                        Contact
+                    </a>
+                </li>
+            </ul>
+            <div class="d-flex gap-2">
+                <a th:href="@{/login}" 
+                   class="btn btn-outline-light rounded-pill px-4">
+                    <i class="fas fa-sign-in-alt me-1"></i>Connexion
+                </a>
+                <a th:href="@{/register}" 
+                   class="btn btn-light text-primary rounded-pill px-4 fw-bold">
+                    <i class="fas fa-user-plus me-1"></i>S'inscrire
+                </a>
+            </div>
         </div>
     </div>
 </nav>
 
-<!-- Hero Section -->
-<div class="bg-primary text-white py-5">
-    <div class="container text-center">
-        <h1 class="display-4">🏥 Bienvenue au Cabinet Médical</h1>
-        <p class="lead mt-3">
-            Prenez rendez-vous en ligne facilement
+<!-- HERO -->
+<section class="hero text-white" style="padding-top: 80px;">
+    <div class="container">
+        <div class="row align-items-center min-vh-100">
+            <div class="col-lg-6 hero-content">
+                <div class="mb-3">
+                    <span class="badge rounded-pill px-3 py-2"
+                          style="background:rgba(255,255,255,0.2); font-size:0.9rem;">
+                        <i class="fas fa-star me-1"></i>
+                        Cabinet de confiance depuis 2010
+                    </span>
+                </div>
+                <h1 class="mb-4">
+                    Votre santé,<br>
+                    <span style="color:#90caf9;">notre priorité</span>
+                </h1>
+                <p class="mb-5">
+                    Prenez rendez-vous en ligne avec nos médecins 
+                    spécialisés. Un suivi médical personnalisé et 
+                    de qualité pour toute la famille.
+                </p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a th:href="@{/register}" class="btn-hero-primary btn">
+                        <i class="fas fa-calendar-plus me-2"></i>
+                        Prendre RDV
+                    </a>
+                    <a th:href="@{/login}" class="btn-hero-secondary btn">
+                        <i class="fas fa-sign-in-alt me-2"></i>
+                        Se connecter
+                    </a>
+                </div>
+                <div class="row mt-5 g-3">
+                    <div class="col-4 text-center">
+                        <div style="font-size:1.8rem; font-weight:800;">
+                            500+
+                        </div>
+                        <div style="opacity:0.8; font-size:0.85rem;">
+                            Patients
+                        </div>
+                    </div>
+                    <div class="col-4 text-center" 
+                         style="border-left:1px solid rgba(255,255,255,0.3);
+                                border-right:1px solid rgba(255,255,255,0.3);">
+                        <div style="font-size:1.8rem; font-weight:800;">
+                            10+
+                        </div>
+                        <div style="opacity:0.8; font-size:0.85rem;">
+                            Médecins
+                        </div>
+                    </div>
+                    <div class="col-4 text-center">
+                        <div style="font-size:1.8rem; font-weight:800;">
+                            15
+                        </div>
+                        <div style="opacity:0.8; font-size:0.85rem;">
+                            Ans d'expérience
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 hero-image text-center mt-5 mt-lg-0">
+                <img src="https://img.freepik.com/free-photo/medical-team-discussing-patient-case_23-2148980774.jpg"
+                     alt="Médecins"
+                     class="img-fluid"
+                     style="border-radius:20px; 
+                            box-shadow:0 20px 60px rgba(0,0,0,0.3);
+                            max-height:500px; width:100%; object-fit:cover;">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services-section" id="services">
+    <div class="container">
+        <div class="text-center">
+            <h2 class="section-title">Nos Services</h2>
+            <p class="section-subtitle">
+                Des soins de qualité pour votre bien-être
+            </p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="service-card">
+                    <div class="service-icon" 
+                         style="background:#e3f2fd;">
+                        <i class="fas fa-calendar-check" 
+                           style="color:#1a73e8;"></i>
+                    </div>
+                    <h5>Rendez-vous en ligne</h5>
+                    <p>Réservez votre consultation en quelques clics, 
+                       24h/24 et 7j/7 depuis chez vous.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="service-card">
+                    <div class="service-icon" 
+                         style="background:#e8f5e9;">
+                        <i class="fas fa-user-md" 
+                           style="color:#2e7d32;"></i>
+                    </div>
+                    <h5>Médecins Spécialisés</h5>
+                    <p>Une équipe de médecins experts dans 
+                       différentes spécialités médicales.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="service-card">
+                    <div class="service-icon" 
+                         style="background:#fce4ec;">
+                        <i class="fas fa-file-medical" 
+                           style="color:#c62828;"></i>
+                    </div>
+                    <h5>Dossier Médical</h5>
+                    <p>Accédez à votre historique médical et 
+                       ordonnances à tout moment en ligne.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="service-card">
+                    <div class="service-icon" 
+                         style="background:#f3e5f5;">
+                        <i class="fas fa-prescription" 
+                           style="color:#7b1fa2;"></i>
+                    </div>
+                    <h5>Ordonnances</h5>
+                    <p>Recevez et consultez vos ordonnances 
+                       directement depuis votre espace patient.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="service-card">
+                    <div class="service-icon" 
+                         style="background:#fff8e1;">
+                        <i class="fas fa-clock" 
+                           style="color:#f57f17;"></i>
+                    </div>
+                    <h5>Horaires Flexibles</h5>
+                    <p>Des créneaux disponibles matin, après-midi 
+                       et soir pour s'adapter à votre emploi du temps.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="service-card">
+                    <div class="service-icon" 
+                         style="background:#e0f7fa;">
+                        <i class="fas fa-shield-alt" 
+                           style="color:#00838f;"></i>
+                    </div>
+                    <h5>Données Sécurisées</h5>
+                    <p>Vos données médicales sont protégées et 
+                       accessibles uniquement par vous et votre médecin.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- MEDECINS -->
+<section class="doctors-section" id="medecins">
+    <div class="container">
+        <div class="text-center">
+            <h2 class="section-title">Notre Équipe Médicale</h2>
+            <p class="section-subtitle">
+                Des professionnels dédiés à votre santé
+            </p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="doctor-card card">
+                    <img src="https://img.freepik.com/free-photo/doctor-with-stethoscope_1134-2_jpg"
+                         class="doctor-img"
+                         alt="Médecin"
+                         onerror="this.src='https://via.placeholder.com/300x220/1a73e8/white?text=Dr.+Médecin'">
+                    <div class="doctor-info">
+                        <div class="doctor-name">Dr. Ben Ali Mohamed</div>
+                        <div class="doctor-specialty">
+                            <i class="fas fa-heart me-1"></i>Cardiologie
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="doctor-card card">
+                    <img src="https://img.freepik.com/free-photo/female-doctor-hospital_23-2148827776.jpg"
+                         class="doctor-img"
+                         alt="Médecin"
+                         onerror="this.src='https://via.placeholder.com/300x220/1a73e8/white?text=Dr.+Médecin'">
+                    <div class="doctor-info">
+                        <div class="doctor-name">Dr. Trabelsi Sonia</div>
+                        <div class="doctor-specialty">
+                            <i class="fas fa-baby me-1"></i>Pédiatrie
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="doctor-card card">
+                    <img src="https://img.freepik.com/free-photo/doctor-stethoscope-hands_1232-2823.jpg"
+                         class="doctor-img"
+                         alt="Médecin"
+                         onerror="this.src='https://via.placeholder.com/300x220/1a73e8/white?text=Dr.+Médecin'">
+                    <div class="doctor-info">
+                        <div class="doctor-name">Dr. Mansouri Karim</div>
+                        <div class="doctor-specialty">
+                            <i class="fas fa-stethoscope me-1"></i>Généraliste
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+    <div class="container">
+        <h2 class="text-white fw-800 mb-3" 
+            style="font-size:2.2rem; font-weight:800;">
+            Prêt à prendre soin de votre santé ?
+        </h2>
+        <p class="text-white mb-4" style="opacity:0.9; font-size:1.1rem;">
+            Créez votre compte gratuitement et prenez 
+            rendez-vous en quelques minutes
         </p>
         <a th:href="@{/register}" 
-           class="btn btn-light btn-lg mt-3 me-3">
-            📝 Créer un compte patient
-        </a>
-        <a th:href="@{/login}" 
-           class="btn btn-outline-light btn-lg mt-3">
-            🔐 Se connecter
+           class="btn btn-light btn-lg rounded-pill px-5 fw-bold"
+           style="color:#1a73e8;">
+            <i class="fas fa-user-plus me-2"></i>
+            Créer mon compte gratuitement
         </a>
     </div>
-</div>
+</section>
 
-<!-- Services -->
-<div class="container mt-5">
-    <h2 class="text-center mb-4">Nos Services</h2>
-    <div class="row">
-        <div class="col-md-4 mb-3">
-            <div class="card shadow text-center p-3">
-                <h1>👨‍⚕️</h1>
-                <h5>Médecins Spécialisés</h5>
-                <p>Une équipe de médecins 
-                   à votre service</p>
+<!-- FOOTER -->
+<footer id="contact">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <h6>
+                    <i class="fas fa-hospital-user me-2" 
+                       style="color:#1a73e8;"></i>
+                    Cabinet Médical
+                </h6>
+                <p style="font-size:0.9rem; line-height:1.7;">
+                    Un cabinet moderne au service de votre santé. 
+                    Nous vous offrons des soins de qualité dans 
+                    un environnement chaleureux.
+                </p>
+            </div>
+            <div class="col-md-4 mb-4">
+                <h6>Liens Rapides</h6>
+                <a th:href="@{/login}">
+                    <i class="fas fa-chevron-right me-1"></i>Connexion
+                </a>
+                <a th:href="@{/register}">
+                    <i class="fas fa-chevron-right me-1"></i>S'inscrire
+                </a>
+                <a href="#services">
+                    <i class="fas fa-chevron-right me-1"></i>Nos Services
+                </a>
+                <a href="#medecins">
+                    <i class="fas fa-chevron-right me-1"></i>Nos Médecins
+                </a>
+            </div>
+            <div class="col-md-4 mb-4">
+                <h6>Contact</h6>
+                <p style="font-size:0.9rem;">
+                    <i class="fas fa-map-marker-alt me-2" 
+                       style="color:#1a73e8;"></i>
+                    Tunis, Tunisie
+                </p>
+                <p style="font-size:0.9rem;">
+                    <i class="fas fa-phone me-2" 
+                       style="color:#1a73e8;"></i>
+                    +216 71 000 000
+                </p>
+                <p style="font-size:0.9rem;">
+                    <i class="fas fa-envelope me-2" 
+                       style="color:#1a73e8;"></i>
+                    contact@cabinet.tn
+                </p>
+                <p style="font-size:0.9rem;">
+                    <i class="fas fa-clock me-2" 
+                       style="color:#1a73e8;"></i>
+                    Lun-Sam : 8h00 - 18h00
+                </p>
             </div>
         </div>
-        <div class="col-md-4 mb-3">
-            <div class="card shadow text-center p-3">
-                <h1>📅</h1>
-                <h5>Rendez-vous en ligne</h5>
-                <p>Prenez rendez-vous 
-                   à tout moment</p>
-            </div>
-        </div>
-        <div class="col-md-4 mb-3">
-            <div class="card shadow text-center p-3">
-                <h1>📋</h1>
-                <h5>Suivi médical</h5>
-                <p>Accédez à vos ordonnances 
-                   et historique</p>
-            </div>
+        <div class="footer-bottom">
+            © 2025 Cabinet Médical — FST Master STR — 
+            Tous droits réservés
         </div>
     </div>
-</div>
-
-<!-- Footer -->
-<footer class="bg-primary text-white text-center py-3 mt-5">
-    <p>© 2025 Cabinet Médical — FST Master STR</p>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
