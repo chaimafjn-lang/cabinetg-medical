@@ -20,7 +20,7 @@ VALUES
     true
 ),
 (
-    'medecin1',
+    'medecin',
     '$2a$10$dXJ3SW6G7P50lGmMkkmwe.20cQQubK3.HZWzG3YB1tlRy.fqvM/BG',
     'Dr Ben Ali Mohamed',
     'benali@cabinet.tn',
@@ -28,7 +28,7 @@ VALUES
     true
 ),
 (
-    'secretaire1',
+    'secretaire',
     '$2a$10$dXJ3SW6G7P50lGmMkkmwe.20cQQubK3.HZWzG3YB1tlRy.fqvM/BG',
     'Secrétaire',
     'secretaire@cabinet.tn',
