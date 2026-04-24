@@ -1,4 +1,3 @@
--- Table des utilisateurs
 CREATE TABLE utilisateurs (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) UNIQUE NOT NULL,
@@ -9,15 +8,12 @@ CREATE TABLE utilisateurs (
     actif BOOLEAN DEFAULT TRUE
 );
 
--- Insertion des utilisateurs par défaut
--- Les mots de passe sont cryptés avec BCrypt
--- admin123
 INSERT INTO utilisateurs 
     (username, password, nom_complet, email, role, actif)
 VALUES
 (
     'admin',
-    '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iAt6Z5EH',
+    '$2a$10$dXJ3SW6G7P50lGmMkkmwe.20cQQubK3.HZWzG3YB1tlRy.fqvM/BG',
     'Administrateur',
     'admin@cabinet.tn',
     'ADMIN',
@@ -25,7 +21,7 @@ VALUES
 ),
 (
     'medecin1',
-    '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iAt6Z5EH',
+    '$2a$10$dXJ3SW6G7P50lGmMkkmwe.20cQQubK3.HZWzG3YB1tlRy.fqvM/BG',
     'Dr Ben Ali Mohamed',
     'benali@cabinet.tn',
     'MEDECIN',
@@ -33,7 +29,7 @@ VALUES
 ),
 (
     'secretaire1',
-    '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iAt6Z5EH',
+    '$2a$10$dXJ3SW6G7P50lGmMkkmwe.20cQQubK3.HZWzG3YB1tlRy.fqvM/BG',
     'Secrétaire',
     'secretaire@cabinet.tn',
     'SECRETAIRE',
