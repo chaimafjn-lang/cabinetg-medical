@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Liste des Rendez-vous</title>
+    <link rel="stylesheet" 
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+<nav class="navbar navbar-dark bg-warning">
+    <div class="container">
+        <span class="navbar-brand">📅 Rendez-vous</span>
+        <a th:href="@{/dashboard}" class="btn btn-outline-dark btn-sm">
+            ← Dashboard
+        </a>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>📅 Liste des Rendez-vous</h2>
+        <a th:href="@{/rendezvous/nouveau}" class="btn btn-warning">
+            + Nouveau RDV
+        </a>
+    </div>
+
+    <div th:if="${erreur}" class="alert alert-danger" 
+         th:text="${erreur}"></div>
+
+    <table class="table table-bordered table-hover">
+        <thead class="table-warning">
+            <tr>
+                <th>Patient</th>
+                <th>Médecin</th>
+                <th>Date et Heure</th>
+                <th>Durée</th>
+                <th>Motif</th>
+                <th>Statut</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="rdv : ${rendezvous}">
+                <td th:text="${rdv.patient.nom + ' ' + 
+                    rdv.patient.prenom}"></td>
+                <td th:text="${rdv.medecin.nom + ' ' + 
+                    rdv.medecin.prenom}"></td>
+                <td th:text="${rdv.dateHeure}"></td>
+                <td th:text="${rdv.dureeMinutes + ' min'}"></td>
+                <td th:text="${rdv.motif}"></td>
+                <td>
+                    <span th:text="${rdv.statut}"
+                          th:class="${rdv.statut.name() == 'PLANIFIE'} ? 
+                              'badge bg-primary' :
+                              (${rdv.statut.name() == 'CONFIRME'} ? 
+                              'badge bg-success' :
+                              (${rdv.statut.name() == 'ANNULE'} ? 
+                              'badge bg-danger' : 
+                              'badge bg-secondary'))">
+                    </span>
+                </td>
+                <td>
+                    <a th:href="@{/rendezvous/modifier/{id}(id=${rdv.id})}"
+                       class="btn btn-sm btn-warning">
+                        ✏ Modifier
+                    </a>
+                    <a th:href="@{/rendezvous/annuler/{id}(id=${rdv.id})}"
+                       class="btn btn-sm btn-danger"
+                       onclick="return confirm('Annuler ce RDV ?')">
+                        ❌ Annuler
+                    </a>
+                    <a th:href="@{/ordonnances/nouvelle/{id}(id=${rdv.id})}"
+                       class="btn btn-sm btn-success">
+                        📋 Ordonnance
+                    </a>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(rendezvous)}">
+                <td colspan="7" class="text-center">
+                    Aucun rendez-vous trouvé
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
