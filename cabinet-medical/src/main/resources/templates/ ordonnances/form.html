@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Nouvelle Ordonnance</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-4">
+    <h2>📋 Nouvelle Ordonnance</h2>
+
+    <form th:action="@{/ordonnances/sauvegarder}"
+          th:object="${ordonnance}" method="post">
+
+        <!-- ID du rendez-vous caché -->
+        <input type="hidden" 
+               th:field="*{rendezVous.id}">
+
+        <!-- Infos du RDV -->
+        <div class="card mb-3">
+            <div class="card-header bg-primary text-white">
+                Informations du Rendez-vous
+            </div>
+            <div class="card-body">
+                <p>
+                    <strong>Patient : </strong>
+                    <span th:text="${ordonnance.rendezVous
+                        .patient.nom + ' ' + 
+                        ordonnance.rendezVous.patient.prenom}">
+                    </span>
+                </p>
+                <p>
+                    <strong>Médecin : </strong>
+                    <span th:text="${ordonnance.rendezVous
+                        .medecin.nom + ' ' + 
+                        ordonnance.rendezVous.medecin.prenom}">
+                    </span>
+                </p>
+                <p>
+                    <strong>Date RDV : </strong>
+                    <span th:text="${ordonnance.rendezVous
+                        .dateHeure}">
+                    </span>
+                </p>
+            </div>
+        </div>
+
+        <!-- Observations -->
+        <div class="mb-3">
+            <label>Observations</label>
+            <textarea th:field="*{observations}"
+                      class="form-control" rows="3"
+                      placeholder="Notes du médecin...">
+            </textarea>
+        </div>
+
+        <!-- Médicaments -->
+        <div class="card mb-3">
+            <div class="card-header bg-success text-white">
+                💊 Médicaments
+            </div>
+            <div class="card-body" id="medicaments">
+                <div th:each="med, stat : *{medicaments}"
+                     class="row mb-2 align-items-center">
+                    <div class="col-md-4">
+                        <input type="text"
+                               th:field="*{medicaments[__${stat.index}__].nomMedicament}"
+                               class="form-control"
+                               placeholder="Nom médicament">
+                    </div>
+                    <div class="col-md-4">
+                        <input type="text"
+                               th:field="*{medicaments[__${stat.index}__].posologie}"
+                               class="form-control"
+                               placeholder="Posologie ex: 1 cp matin">
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text"
+                               th:field="*{medicaments[__${stat.index}__].duree}"
+                               class="form-control"
+                               placeholder="Durée ex: 7 jours">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-success">
+            💾 Sauvegarder
+        </button>
+        <a th:href="@{/rendezvous}" class="btn btn-secondary">
+            ← Annuler
+        </a>
+
+    </form>
+</div>
+</body>
+</html>
