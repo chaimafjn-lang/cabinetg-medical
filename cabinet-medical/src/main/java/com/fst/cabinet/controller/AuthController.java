@@ -70,8 +70,8 @@ public class AuthController {
     }
 
     // ===== DASHBOARD =====
-    @GetMapping("/dashboard")
-    public String dashboard() {
-        return "dashboard";
-    }
+   // @GetMapping("/dashboard")
+  //  public String dashboard() {
+        //return "dashboard";
+   // }
 }
