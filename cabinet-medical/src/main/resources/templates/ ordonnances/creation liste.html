@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Liste des Ordonnances</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+<nav class="navbar navbar-dark bg-danger">
+    <div class="container">
+        <span class="navbar-brand">📋 Ordonnances</span>
+        <a th:href="@{/dashboard}" class="btn btn-outline-light btn-sm">
+            ← Dashboard
+        </a>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <h2>📋 Liste des Ordonnances</h2>
+
+    <table class="table table-bordered table-hover mt-3">
+        <thead class="table-danger">
+            <tr>
+                <th>N°</th>
+                <th>Patient</th>
+                <th>Médecin</th>
+                <th>Date</th>
+                <th>Médicaments</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="ord : ${ordonnances}">
+                <td th:text="${ord.id}"></td>
+                <td th:text="${ord.rendezVous.patient.nom 
+                    + ' ' + ord.rendezVous.patient.prenom}">
+                </td>
+                <td th:text="${ord.rendezVous.medecin.nom 
+                    + ' ' + ord.rendezVous.medecin.prenom}">
+                </td>
+                <td th:text="${ord.dateEmission}"></td>
+                <td th:text="${#lists.size(ord.medicaments) 
+                    + ' médicament(s)'}">
+                </td>
+                <td>
+                    <a th:href="@{/ordonnances/{id}(id=${ord.id})}"
+                       class="btn btn-sm btn-info">
+                        👁 Voir
+                    </a>
+                    <a th:href="@{/ordonnances/supprimer/{id}(id=${ord.id})}"
+                       class="btn btn-sm btn-danger"
+                       onclick="return confirm('Supprimer ?')">
+                        🗑 Supprimer
+                    </a>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(ordonnances)}">
+                <td colspan="6" class="text-center">
+                    Aucune ordonnance trouvée
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
