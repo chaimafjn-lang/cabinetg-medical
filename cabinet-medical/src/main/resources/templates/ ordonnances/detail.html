@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Détail Ordonnance</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        .ordonnance-header {
+            border-bottom: 2px solid #1a73e8;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        .medicament-table th {
+            background: #1a73e8;
+            color: white;
+        }
+        @media print {
+            .no-print { display: none; }
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-4">
+
+    <!-- Boutons actions -->
+    <div class="no-print mb-3">
+        <button onclick="window.print()" 
+                class="btn btn-primary">
+            🖨️ Imprimer
+        </button>
+        <a th:href="@{/ordonnances}" 
+           class="btn btn-secondary">
+            ← Retour
+        </a>
+    </div>
+
+    <!-- Ordonnance -->
+    <div class="card shadow p-4">
+
+        <!-- En-tête -->
+        <div class="ordonnance-header d-flex 
+                    justify-content-between">
+            <div>
+                <h4 class="text-primary">
+                    🏥 Cabinet Médical
+                </h4>
+                <p class="mb-0">Tunis, Tunisie</p>
+                <p class="mb-0">Tél: +216 71 000 000</p>
+            </div>
+            <div class="text-end">
+                <h5>ORDONNANCE</h5>
+                <p class="mb-0">
+                    <strong>Date : </strong>
+                    <span th:text="${ordonnance.dateEmission}">
+                    </span>
+                </p>
+                <p class="mb-0">
+                    <strong>N° : </strong>
+                    <span th:text="${ordonnance.id}"></span>
+                </p>
+            </div>
+        </div>
+
+        <!-- Patient et Médecin -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card bg-light p-3">
+                    <h6 class="text-primary">👤 Patient</h6>
+                    <p class="mb-1">
+                        <strong th:text="${ordonnance.rendezVous
+                            .patient.nom + ' ' + 
+                            ordonnance.rendezVous.patient.prenom}">
+                        </strong>
+                    </p>
+                    <p class="mb-1">
+                        CIN : 
+                        <span th:text="${ordonnance.rendezVous
+                            .patient.cin}">
+                        </span>
+                    </p>
+                    <p class="mb-0">
+                        Tél : 
+                        <span th:text="${ordonnance.rendezVous
+                            .patient.telephone}">
+                        </span>
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card bg-light p-3">
+                    <h6 class="text-success">👨‍⚕️ Médecin</h6>
+                    <p class="mb-1">
+                        <strong th:text="${'Dr. ' + 
+                            ordonnance.rendezVous.medecin.nom + 
+                            ' ' + 
+                            ordonnance.rendezVous.medecin.prenom}">
+                        </strong>
+                    </p>
+                    <p class="mb-0">
+                        <span th:text="${ordonnance.rendezVous
+                            .medecin.specialite}">
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Médicaments -->
+        <h6 class="text-primary mb-3">💊 Médicaments prescrits</h6>
+        <table class="table medicament-table">
+            <thead>
+                <tr>
+                    <th>Médicament</th>
+                    <th>Posologie</th>
+                    <th>Durée</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="med : ${ordonnance.medicaments}">
+                    <td th:text="${med.nomMedicament}"></td>
+                    <td th:text="${med.posologie}"></td>
+                    <td th:text="${med.duree}"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Observations -->
+        <div th:if="${ordonnance.observations}" class="mt-3">
+            <h6 class="text-primary">📝 Observations</h6>
+            <p th:text="${ordonnance.observations}" 
+               class="border p-3 rounded">
+            </p>
+        </div>
+
+        <!-- Signature -->
+        <div class="text-end mt-4">
+            <p>Signature du médecin</p>
+            <div style="height:60px; border-bottom: 
+                        1px solid #333; width:200px; 
+                        margin-left:auto;">
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>
