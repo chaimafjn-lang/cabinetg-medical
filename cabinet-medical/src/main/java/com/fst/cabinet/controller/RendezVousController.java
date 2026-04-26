@@ -166,5 +166,4 @@ public class RendezVousController {
     public String supprimer(@PathVariable Long id) {
         rendezVousService.supprimer(id);
         return "redirect:/rendezvous";
-    }
-}
+    }}
