@@ -8,9 +8,12 @@
 </head>
 <body>
 <div class="container mt-4">
+
     <h2 th:text="${titre}"></h2>
 
-    <div th:if="${erreur}" class="alert alert-danger" 
+    <!-- Message erreur chevauchement -->
+    <div th:if="${erreur}"
+         class="alert alert-danger"
          th:text="${erreur}"></div>
 
     <form th:action="@{/rendezvous/sauvegarder}"
@@ -19,42 +22,70 @@
         <input type="hidden" th:field="*{id}">
 
         <div class="row">
+
+            <!-- ===== PATIENT ===== -->
             <div class="col-md-6 mb-3">
                 <label>Patient *</label>
-                <select th:field="*{patient.id}" 
-                        class="form-select" required>
-                    <option value="">-- Choisir un patient --</option>
-                    <option th:each="p : ${patients}"
-                            th:value="${p.id}"
-                            th:text="${p.nom + ' ' + p.prenom + 
-                                ' (' + p.cin + ')'}">
-                    </option>
-                </select>
+
+                <!-- Si PATIENT connecté -->
+                <div th:if="${estPatient}">
+                    <input type="text"
+                           class="form-control bg-light"
+                           th:value="${patientNom}"
+                           readonly>
+                    <input type="hidden"
+                           name="patient.id"
+                           th:value="${patientId}">
+                </div>
+
+                <!-- Si ADMIN/MEDECIN/SECRETAIRE -->
+                <div th:unless="${estPatient}">
+                    <select th:field="*{patient.id}"
+                            class="form-select" required>
+                        <option value="">
+                            -- Choisir un patient --
+                        </option>
+                        <option th:each="p : ${patients}"
+                                th:value="${p.id}"
+                                th:text="${p.nom + ' ' +
+                                    p.prenom + ' (' +
+                                    p.cin + ')'}">
+                        </option>
+                    </select>
+                </div>
             </div>
+
+            <!-- ===== MEDECIN ===== -->
             <div class="col-md-6 mb-3">
                 <label>Médecin *</label>
-                <select th:field="*{medecin.id}" 
+                <select th:field="*{medecin.id}"
                         class="form-select" required>
-                    <option value="">-- Choisir un médecin --</option>
+                    <option value="">
+                        -- Choisir un médecin --
+                    </option>
                     <option th:each="m : ${medecins}"
                             th:value="${m.id}"
-                            th:text="${m.nom + ' ' + m.prenom + 
-                                ' - ' + m.specialite}">
+                            th:text="${m.nom + ' ' +
+                                m.prenom + ' - ' +
+                                m.specialite}">
                     </option>
                 </select>
             </div>
         </div>
 
         <div class="row">
+            <!-- Date et heure -->
             <div class="col-md-6 mb-3">
                 <label>Date et Heure *</label>
-                <input type="datetime-local" 
+                <input type="datetime-local"
                        th:field="*{dateHeure}"
                        class="form-control" required>
             </div>
+
+            <!-- Durée -->
             <div class="col-md-6 mb-3">
                 <label>Durée (minutes)</label>
-                <select th:field="*{dureeMinutes}" 
+                <select th:field="*{dureeMinutes}"
                         class="form-select">
                     <option value="15">15 minutes</option>
                     <option value="30">30 minutes</option>
@@ -65,15 +96,21 @@
         </div>
 
         <div class="row">
+            <!-- Motif -->
             <div class="col-md-6 mb-3">
                 <label>Motif</label>
-                <input type="text" th:field="*{motif}"
+                <input type="text"
+                       th:field="*{motif}"
                        class="form-control"
                        placeholder="ex: Consultation générale">
             </div>
-            <div class="col-md-6 mb-3">
+
+            <!-- Statut - caché pour les patients -->
+            <div class="col-md-6 mb-3"
+                 th:unless="${estPatient}">
                 <label>Statut</label>
-                <select th:field="*{statut}" class="form-select">
+                <select th:field="*{statut}"
+                        class="form-select">
                     <option value="PLANIFIE">Planifié</option>
                     <option value="CONFIRME">Confirmé</option>
                     <option value="ANNULE">Annulé</option>
@@ -85,7 +122,9 @@
         <button type="submit" class="btn btn-success">
             💾 Sauvegarder
         </button>
-        <a th:href="@{/rendezvous}" class="btn btn-secondary">
+        <a th:href="${estPatient} ? 
+            '/espace-patient' : '/rendezvous'"
+           class="btn btn-secondary">
             ← Annuler
         </a>
 
