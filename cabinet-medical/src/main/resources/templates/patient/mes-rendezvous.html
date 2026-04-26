@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Mes Rendez-vous</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+<nav class="navbar navbar-dark bg-primary">
+    <div class="container">
+        <span class="navbar-brand">📅 Mes Rendez-vous</span>
+        <a th:href="@{/espace-patient}" 
+           class="btn btn-outline-light btn-sm">
+            ← Mon Espace
+        </a>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <h2>📅 Mes Rendez-vous</h2>
+
+    <a th:href="@{/rendezvous/nouveau}" 
+       class="btn btn-primary mb-3">
+        + Prendre un RDV
+    </a>
+
+    <table class="table table-bordered table-hover">
+        <thead class="table-primary">
+            <tr>
+                <th>Médecin</th>
+                <th>Spécialité</th>
+                <th>Date et Heure</th>
+                <th>Motif</th>
+                <th>Statut</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="rdv : ${rendezvous}">
+                <td th:text="${'Dr. ' + rdv.medecin.nom + 
+                    ' ' + rdv.medecin.prenom}"></td>
+                <td th:text="${rdv.medecin.specialite}"></td>
+                <td th:text="${rdv.dateHeure}"></td>
+                <td th:text="${rdv.motif}"></td>
+                <td>
+                    <span th:text="${rdv.statut}"
+                          th:class="${rdv.statut.name() == 'PLANIFIE'} ? 
+                              'badge bg-primary' :
+                              (${rdv.statut.name() == 'CONFIRME'} ? 
+                              'badge bg-success' :
+                              (${rdv.statut.name() == 'ANNULE'} ? 
+                              'badge bg-danger' : 
+                              'badge bg-secondary'))">
+                    </span>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(rendezvous)}">
+                <td colspan="5" class="text-center">
+                    Aucun rendez-vous trouvé
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
