@@ -13,7 +13,7 @@ public interface PatientRepository
     Patient findByCin(String cin);
 
     // Chercher par email
-    Patient findByEmail(String email):
+    Patient findByEmail(String email) ;
 
     // Recherche globale
     @Query("SELECT p FROM Patient p WHERE " +
