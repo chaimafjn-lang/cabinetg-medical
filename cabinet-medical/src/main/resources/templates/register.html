@@ -11,18 +11,19 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card shadow">
-                <div class="card-header bg-primary text-white text-center">
+                <div class="card-header bg-primary 
+                            text-white text-center">
                     <h4>📝 Créer un compte Patient</h4>
                 </div>
                 <div class="card-body">
 
                     <!-- Message erreur -->
-                    <div th:if="${erreur}" 
-                         class="alert alert-danger" 
+                    <div th:if="${erreur}"
+                         class="alert alert-danger"
                          th:text="${erreur}"></div>
 
                     <!-- Message succès -->
-                    <div th:if="${param.registered}" 
+                    <div th:if="${param.registered}"
                          class="alert alert-success">
                         Compte créé ! Connectez-vous 😊
                     </div>
@@ -31,46 +32,83 @@
                           th:object="${utilisateur}"
                           method="post">
 
+                        <!-- Nom complet -->
                         <div class="mb-3">
-                            <label>Nom complet *</label>
-                            <input type="text" 
+                            <label>Nom complet *
+                                <small class="text-muted">
+                                    (Prénom Nom)
+                                </small>
+                            </label>
+                            <input type="text"
                                    th:field="*{nomComplet}"
-                                   class="form-control" 
+                                   class="form-control"
+                                   placeholder="ex: Leila Hammami"
                                    required>
                         </div>
 
+                        <!-- CIN -->
+                        <div class="mb-3">
+                            <label>CIN *</label>
+                            <input type="text"
+                                   name="cin"
+                                   class="form-control"
+                                   placeholder="ex: 12345678"
+                                   required>
+                        </div>
+
+                        <!-- Téléphone -->
+                        <div class="mb-3">
+                            <label>Téléphone</label>
+                            <input type="text"
+                                   name="telephone"
+                                   class="form-control"
+                                   placeholder="ex: 22000000">
+                        </div>
+
+                        <!-- Email -->
                         <div class="mb-3">
                             <label>Email *</label>
-                            <input type="email" 
+                            <input type="email"
                                    th:field="*{email}"
-                                   class="form-control" 
+                                   class="form-control"
                                    required>
                         </div>
 
+                        <!-- Username -->
                         <div class="mb-3">
-                            <label>Nom d'utilisateur *</label>
-                            <input type="text" 
+                            <label>
+                                Nom d'utilisateur *
+                            </label>
+                            <input type="text"
                                    th:field="*{username}"
-                                   class="form-control" 
+                                   class="form-control"
                                    required>
                         </div>
 
+                        <!-- Mot de passe -->
                         <div class="mb-3">
                             <label>Mot de passe *</label>
-                            <input type="password" 
+                            <input type="password"
                                    th:field="*{password}"
-                                   class="form-control" 
+                                   class="form-control"
                                    required>
                         </div>
 
-                        <button type="submit" 
+                        <button type="submit"
                                 class="btn btn-primary w-100">
                             Créer mon compte
                         </button>
 
                         <div class="text-center mt-3">
                             <a th:href="@{/login}">
-                                Déjà un compte ? Se connecter
+                                Déjà un compte ? 
+                                Se connecter
+                            </a>
+                        </div>
+
+                        <div class="text-center mt-2">
+                            <a th:href="@{/accueil}">
+                                ← Retour accueil
                             </a>
                         </div>
 
