@@ -68,6 +68,11 @@ public class AuthController {
         // Rediriger vers login après inscription
         return "redirect:/login?registered";
     }
+ // ===== ESPACE PATIENT =====
+    @GetMapping("/espace-patient")
+    public String espacePatient() {
+        return "espace-patient";
+    }
 
     // ===== DASHBOARD =====
    // @GetMapping("/dashboard")

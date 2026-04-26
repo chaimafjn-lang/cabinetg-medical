@@ -4,6 +4,7 @@ import com.fst.cabinet.service.PatientService;
 import com.fst.cabinet.service.MedecinService;
 import com.fst.cabinet.service.RendezVousService;
 import com.fst.cabinet.service.OrdonnanceService;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,25 +29,27 @@ public class DashboardController {
     }
 
     @GetMapping("/dashboard")
-    public String dashboard(Model model) {
+    public String dashboard(Model model, 
+                           Authentication auth) {
 
-        // Nombre total de patients
+        // Récupérer le rôle de l'utilisateur connecté
+        String role = auth.getAuthorities()
+            .iterator().next().getAuthority();
+
+        // Si c'est un PATIENT → rediriger vers espace patient
+        if (role.equals("ROLE_PATIENT")) {
+            return "redirect:/espace-patient";
+        }
+
+        // Sinon afficher le dashboard normal
         model.addAttribute("totalPatients",
             patientService.getTousLesPatients().size());
-
-        // Nombre total de médecins actifs
         model.addAttribute("totalMedecins",
             medecinService.getMedecinsActifs().size());
-
-        // RDV d'aujourd'hui
         model.addAttribute("rdvAujourdhui",
             rendezVousService.getRDVAujourdhui());
-
-        // Nombre total de RDV
         model.addAttribute("totalRDV",
             rendezVousService.getTousLesRDV().size());
-
-        // Nombre total ordonnances
         model.addAttribute("totalOrdonnances",
             ordonnanceService.getToutesLesOrdonnances().size());
 
