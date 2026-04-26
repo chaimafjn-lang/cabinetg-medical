@@ -167,4 +167,3 @@ public class RendezVousController {
         rendezVousService.supprimer(id);
         return "redirect:/rendezvous";
     }
-}
