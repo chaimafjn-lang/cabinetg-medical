@@ -14,4 +14,3 @@ public class CabinetMedicalApplication {
             CabinetMedicalApplication.class, args);
     }
 }
-
