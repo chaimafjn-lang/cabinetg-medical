@@ -1,9 +1,11 @@
 package com.fst.cabinet.controller;
 
+import com.fst.cabinet.entity.Patient;
 import com.fst.cabinet.entity.Utilisateur;
+import com.fst.cabinet.repository.PatientRepository;
 import com.fst.cabinet.repository.UtilisateurRepository;
-import com.fst.cabinet.service.RendezVousService;
 import com.fst.cabinet.service.OrdonnanceService;
+import com.fst.cabinet.service.RendezVousService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,14 +17,17 @@ public class PatientEspaceController {
     private final UtilisateurRepository utilisateurRepository;
     private final RendezVousService rendezVousService;
     private final OrdonnanceService ordonnanceService;
+    private final PatientRepository patientRepository;
 
     public PatientEspaceController(
             UtilisateurRepository utilisateurRepository,
             RendezVousService rendezVousService,
-            OrdonnanceService ordonnanceService) {
+            OrdonnanceService ordonnanceService,
+            PatientRepository patientRepository) {
         this.utilisateurRepository = utilisateurRepository;
         this.rendezVousService = rendezVousService;
         this.ordonnanceService = ordonnanceService;
+        this.patientRepository = patientRepository;
     }
 
     // ===== ESPACE PATIENT =====
@@ -35,12 +40,23 @@ public class PatientEspaceController {
     @GetMapping("/mes-rendezvous")
     public String mesRendezVous(Model model,
             Authentication auth) {
-        // Récupérer l'utilisateur connecté
+        // Trouver l'utilisateur connecté
         Utilisateur user = utilisateurRepository
             .findByUsername(auth.getName());
-        // Afficher tous les RDV pour l'instant
-        model.addAttribute("rendezvous",
-            rendezVousService.getTousLesRDV());
+        // Trouver sa fiche patient par email
+        Patient patient = patientRepository
+            .findByEmail(user.getEmail());
+
+        if (patient != null) {
+            // Afficher SEULEMENT ses RDV
+            model.addAttribute("rendezvous",
+                rendezVousService
+                    .getRDVParPatient(patient.getId()));
+        } else {
+            // Aucun RDV
+            model.addAttribute("rendezvous",
+                new java.util.ArrayList<>());
+        }
         return "patient/mes-rendezvous";
     }
 
@@ -48,8 +64,23 @@ public class PatientEspaceController {
     @GetMapping("/mes-ordonnances")
     public String mesOrdonnances(Model model,
             Authentication auth) {
-        model.addAttribute("ordonnances",
-            ordonnanceService.getToutesLesOrdonnances());
+        // Trouver l'utilisateur connecté
+        Utilisateur user = utilisateurRepository
+            .findByUsername(auth.getName());
+        // Trouver sa fiche patient par email
+        Patient patient = patientRepository
+            .findByEmail(user.getEmail());
+
+        if (patient != null) {
+            // Afficher SEULEMENT ses ordonnances
+            model.addAttribute("ordonnances",
+                ordonnanceService
+                    .getOrdonnancesParPatient(
+                        patient.getId()));
+        } else {
+            model.addAttribute("ordonnances",
+                new java.util.ArrayList<>());
+        }
         return "patient/mes-ordonnances";
     }
 
@@ -70,7 +101,6 @@ public class PatientEspaceController {
             Authentication auth) {
         Utilisateur user = utilisateurRepository
             .findByUsername(auth.getName());
-        // Mettre à jour seulement nom et email
         user.setNomComplet(userForm.getNomComplet());
         user.setEmail(userForm.getEmail());
         utilisateurRepository.save(user);
