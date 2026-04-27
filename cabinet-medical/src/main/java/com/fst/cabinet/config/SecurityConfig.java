@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -22,25 +23,39 @@ public class SecurityConfig {
     }
 
     @Bean
-    SecurityFilterChain filterChain(
+    public SecurityFilterChain filterChain(
             HttpSecurity http) throws Exception {
         http
+            .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                // Pages publiques sans login
-                .requestMatchers("/", "/accueil",
-                    "/login", "/register",
-                    "/css/**", "/js/**").permitAll()
+                // ✅ Pages publiques sans login
+                .requestMatchers(
+                    new AntPathRequestMatcher("/"),
+                    new AntPathRequestMatcher("/accueil"),
+                    new AntPathRequestMatcher("/login"),
+                    new AntPathRequestMatcher("/register"),
+                    new AntPathRequestMatcher("/css/**"),
+                    new AntPathRequestMatcher("/js/**"),
+                    new AntPathRequestMatcher("/images/**"),
+                    // ✅ Confirmation RDV sans login
+                    new AntPathRequestMatcher("/rdv/confirmer"),
+                    new AntPathRequestMatcher("/rdv/annuler-email")
+                ).permitAll()
                 // Pages admin seulement
-                .requestMatchers("/admin/**")
+                .requestMatchers(
+                    new AntPathRequestMatcher("/admin/**"))
                     .hasRole("ADMIN")
                 // Pages médecin et admin
-                .requestMatchers("/medecins/**")
+                .requestMatchers(
+                    new AntPathRequestMatcher("/medecins/**"))
                     .hasAnyRole("ADMIN", "MEDECIN")
                 // Pages secrétaire, médecin et admin
-                .requestMatchers("/patients/**")
+                .requestMatchers(
+                    new AntPathRequestMatcher("/patients/**"))
                     .hasAnyRole("ADMIN", "MEDECIN", "SECRETAIRE")
                 // RDV accessible à tous les connectés
-                .requestMatchers("/rendezvous/**")
+                .requestMatchers(
+                    new AntPathRequestMatcher("/rendezvous/**"))
                     .hasAnyRole("ADMIN", "MEDECIN",
                         "SECRETAIRE", "PATIENT")
                 // Tout le reste nécessite connexion
@@ -48,11 +63,12 @@ public class SecurityConfig {
             )
             .formLogin(form -> form
                 .loginPage("/login")
-                // Redirection selon le rôle après login
                 .defaultSuccessUrl("/dashboard", true)
                 .permitAll()
             )
             .logout(logout -> logout
+                .logoutRequestMatcher(
+                    new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/accueil")
                 .permitAll()
             );
@@ -60,12 +76,12 @@ public class SecurityConfig {
     }
 
     @Bean
-    PasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    AuthenticationManager authenticationManager(
+    public AuthenticationManager authenticationManager(
             HttpSecurity http) throws Exception {
         AuthenticationManagerBuilder builder = http
             .getSharedObject(
