@@ -103,7 +103,23 @@
                        th:field="*{motif}"
                        class="form-control"
                        placeholder="ex: Consultation générale">
+                       
             </div>
+            <!-- Email rappel -->
+<div class="col-md-6 mb-3">
+    <label>
+        📧 Email pour rappel *
+    </label>
+    <input type="email"
+           th:field="*{emailRappel}"
+           class="form-control"
+           placeholder="ex: patient@email.tn"
+           required>
+    <small class="text-muted">
+        📱 Vous recevrez un rappel 
+        15 min avant le RDV
+    </small>
+</div>
 
             <!-- Statut - caché pour les patients -->
             <div class="col-md-6 mb-3"
