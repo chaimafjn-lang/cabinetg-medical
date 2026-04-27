@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
 
+// Table des rendez-vous
 @Entity
 @Table(name = "rendez_vous")
 @Data
@@ -15,26 +16,45 @@ public class RendezVous {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne               // @ManyToOne : plusieurs RDV peuvent appartenir à un seul patient
-                        
-    @JoinColumn(name = "patient_id", nullable = false)    // @JoinColumn : nom de la colonne dans la table MySQL
+    // Lien vers le patient
+    @ManyToOne
+    @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
 
+    // Lien vers le médecin
     @ManyToOne
     @JoinColumn(name = "medecin_id", nullable = false)
     private Medecin medecin;
 
-    private LocalDateTime dateHeure;     // Date ET heure du rendez-vous
-    private int dureeMinutes;            // durée rdv
-    private String motif;                // aleh jey yadi (consultation general)
+    // Date et heure du RDV
+    private LocalDateTime dateHeure;
 
-    @Enumerated(EnumType.STRING) // pour stocker le texte dans MySQL (PLANIFIE, CONFIRME...)
-    private StatutRDV statut = StatutRDV.PLANIFIE;  // Par défaut un nouveau RDV est PLANIFIE
+    // Durée en minutes
+    private int dureeMinutes;
 
+    // Motif du RDV
+    private String motif;
+
+    // Statut du RDV
+    @Enumerated(EnumType.STRING)
+    private StatutRDV statut = StatutRDV.PLANIFIE;
+
+    // Email du patient pour rappel
+    // Récupéré automatiquement depuis Patient.email
+    private String emailRappel;
+
+    // Token unique pour confirmation sans login
+    @Column(unique = true)
+    private String token;
+
+    // Rappel déjà envoyé ?
+    private boolean rappelEnvoye = false;
+
+    // Statuts possibles
     public enum StatutRDV {
-        PLANIFIE, // RDV créé mais pas encore confirmé
-        CONFIRME, // RDV confirmé
-        ANNULE, //annulé
-        TERMINE // terminé
+        PLANIFIE,
+        CONFIRME,
+        ANNULE,
+        TERMINE
     }
 }
