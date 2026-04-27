@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface RendezVousRepository 
+public interface RendezVousRepository
     extends JpaRepository<RendezVous, Long> {
 
     // RDV d'un médecin
@@ -37,4 +37,18 @@ public interface RendezVousRepository
         @Param("fin") LocalDateTime fin,
         @Param("rdvId") Long rdvId
     );
+
+    // RDV pour rappel (dans 15 min, pas envoyé)
+    @Query("SELECT r FROM RendezVous r WHERE " +
+           "r.dateHeure BETWEEN :debut AND :fin AND " +
+           "r.rappelEnvoye = false AND " +
+           "r.statut != 'ANNULE' AND " +
+           "r.emailRappel IS NOT NULL")
+    List<RendezVous> findRDVPourRappel(
+        @Param("debut") LocalDateTime debut,
+        @Param("fin") LocalDateTime fin
+    );
+
+    // Trouver RDV par token
+    RendezVous findByToken(String token);
 }
