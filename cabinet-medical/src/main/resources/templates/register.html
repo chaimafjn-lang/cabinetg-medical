@@ -5,93 +5,135 @@
     <title>Inscription</title>
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        .photo-preview {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #1a73e8;
+            margin: 10px auto;
+            display: block;
+        }
+    </style>
 </head>
 <body class="bg-light">
-<div class="container mt-5">
+<div class="container mt-4">
     <div class="row justify-content-center">
-        <div class="col-md-6">
+        <div class="col-md-7">
             <div class="card shadow">
-                <div class="card-header bg-primary 
+                <div class="card-header bg-primary
                             text-white text-center">
                     <h4>📝 Créer un compte Patient</h4>
                 </div>
                 <div class="card-body">
 
-                    <!-- Message erreur -->
+                    <!-- Erreur -->
                     <div th:if="${erreur}"
                          class="alert alert-danger"
                          th:text="${erreur}"></div>
 
-                    <!-- Message succès -->
-                    <div th:if="${param.registered}"
-                         class="alert alert-success">
-                        Compte créé ! Connectez-vous 😊
+                    <!-- Avertissement photo -->
+                    <div th:if="${avertissement}"
+                         class="alert alert-warning"
+                         th:text="${avertissement}">
                     </div>
 
+                    <!-- IMPORTANT: enctype pour photo -->
                     <form th:action="@{/register}"
                           th:object="${utilisateur}"
-                          method="post">
+                          method="post"
+                          enctype="multipart/form-data">
 
-                        <!-- Nom complet -->
-                        <div class="mb-3">
-                            <label>Nom complet *
-                                <small class="text-muted">
-                                    (Prénom Nom)
+                        <!-- Photo -->
+                        <div class="text-center mb-4">
+                            <img id="preview"
+                                 src="/photos/default.jpg"
+                                 class="photo-preview"
+                                 alt="Photo">
+                            <div class="mt-2">
+                                <label class="btn btn-outline-primary btn-sm">
+                                    📷 Choisir une photo
+                                    <input type="file"
+                                           name="photo"
+                                           accept=".jpg,.jpeg,.png"
+                                           style="display:none"
+                                           onchange="previewPhoto(this)">
+                                </label>
+                                <small class="d-block text-muted mt-1">
+                                    JPG ou PNG uniquement
                                 </small>
-                            </label>
-                            <input type="text"
-                                   th:field="*{nomComplet}"
-                                   class="form-control"
-                                   placeholder="ex: Leila Hammami"
-                                   required>
+                            </div>
                         </div>
 
-                        <!-- CIN -->
-                        <div class="mb-3">
-                            <label>CIN *</label>
-                            <input type="text"
-                                   name="cin"
-                                   class="form-control"
-                                   placeholder="ex: 12345678"
-                                   required>
+                        <div class="row">
+                            <!-- Nom complet -->
+                            <div class="col-md-6 mb-3">
+                                <label>Nom complet *
+                                    <small class="text-muted">
+                                        (Prénom Nom)
+                                    </small>
+                                </label>
+                                <input type="text"
+                                       th:field="*{nomComplet}"
+                                       class="form-control"
+                                       placeholder="ex: Leila Hammami"
+                                       required>
+                            </div>
+
+                            <!-- CIN -->
+                            <div class="col-md-6 mb-3">
+                                <label>CIN *</label>
+                                <input type="text"
+                                       name="cin"
+                                       class="form-control"
+                                       placeholder="ex: 12345678"
+                                       required>
+                            </div>
                         </div>
 
-                        <!-- Téléphone -->
-                        <div class="mb-3">
-                            <label>Téléphone</label>
-                            <input type="text"
-                                   name="telephone"
-                                   class="form-control"
-                                   placeholder="ex: 22000000">
+                        <div class="row">
+                            <!-- Téléphone -->
+                            <div class="col-md-6 mb-3">
+                                <label>Téléphone</label>
+                                <input type="text"
+                                       name="telephone"
+                                       class="form-control"
+                                       placeholder="ex: 22000000">
+                            </div>
+
+                            <!-- Email -->
+                            <div class="col-md-6 mb-3">
+                                <label>Email *</label>
+                                <input type="email"
+                                       th:field="*{email}"
+                                       class="form-control"
+                                       required>
+                            </div>
                         </div>
 
-                        <!-- Email -->
-                        <div class="mb-3">
-                            <label>Email *</label>
-                            <input type="email"
-                                   th:field="*{email}"
-                                   class="form-control"
-                                   required>
-                        </div>
+                        <div class="row">
+                            <!-- Username -->
+                            <div class="col-md-6 mb-3">
+                                <label>
+                                    Nom d'utilisateur *
+                                </label>
+                                <input type="text"
+                                       th:field="*{username}"
+                                       class="form-control"
+                                       required>
+                            </div>
 
-                        <!-- Username -->
-                        <div class="mb-3">
-                            <label>
-                                Nom d'utilisateur *
-                            </label>
-                            <input type="text"
-                                   th:field="*{username}"
-                                   class="form-control"
-                                   required>
-                        </div>
-
-                        <!-- Mot de passe -->
-                        <div class="mb-3">
-                            <label>Mot de passe *</label>
-                            <input type="password"
-                                   th:field="*{password}"
-                                   class="form-control"
-                                   required>
+                            <!-- Mot de passe -->
+                            <div class="col-md-6 mb-3">
+                                <label>
+                                    Mot de passe *
+                                </label>
+                                <input type="password"
+                                       th:field="*{password}"
+                                       class="form-control"
+                                       required>
+                            </div>
                         </div>
 
                         <button type="submit"
@@ -101,11 +143,10 @@
 
                         <div class="text-center mt-3">
                             <a th:href="@{/login}">
-                                Déjà un compte ? 
+                                Déjà un compte ?
                                 Se connecter
                             </a>
                         </div>
-
                         <div class="text-center mt-2">
                             <a th:href="@{/accueil}">
                                 ← Retour accueil
@@ -118,5 +159,20 @@
         </div>
     </div>
 </div>
+
+<script>
+// Prévisualiser la photo avant upload
+function previewPhoto(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('preview')
+                .src = e.target.result;
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+</script>
+
 </body>
 </html>

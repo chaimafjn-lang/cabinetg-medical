@@ -15,6 +15,21 @@
         <div class="card-header bg-primary text-white">
             <!-- Affiche nom et prénom du patient -->
             <h5 th:text="${patient.nom + ' ' + patient.prenom}"></h5>
+            <div class="card-header bg-primary text-white">
+    <div class="d-flex align-items-center gap-3">
+        <!-- Photo du patient -->
+        <img th:src="@{'/photos/' + ${patient.photo}}"
+             onerror="this.src='/photos/default.jpg'"
+             style="width:60px;height:60px;
+                    border-radius:50%;
+                    object-fit:cover;
+                    border:2px solid white;">
+        <h5 class="mb-0"
+            th:text="${patient.nom + ' ' + 
+                patient.prenom}">
+        </h5>
+    </div>
+</div>
         </div>
         <div class="card-body">
             <div class="row">

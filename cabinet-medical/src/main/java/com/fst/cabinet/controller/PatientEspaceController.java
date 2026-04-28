@@ -32,7 +32,32 @@ public class PatientEspaceController {
 
     // ===== ESPACE PATIENT =====
     @GetMapping("/espace-patient")
-    public String espacePatient() {
+    public String espacePatient(Model model,
+            Authentication auth) {
+
+        // Trouver l'utilisateur connecté
+        Utilisateur user = utilisateurRepository
+            .findByUsername(auth.getName());
+
+        // Trouver sa fiche patient
+        Patient patient = patientRepository
+            .findByEmail(user.getEmail());
+
+        if (patient != null) {
+            // Afficher sa photo
+            model.addAttribute("photo",
+                patient.getPhoto() != null &&
+                !patient.getPhoto().isEmpty() ?
+                patient.getPhoto() : "default.jpg");
+            // Afficher son nom
+            model.addAttribute("nomPatient",
+                patient.getPrenom() + " " +
+                patient.getNom());
+        } else {
+            model.addAttribute("photo", "default.jpg");
+            model.addAttribute("nomPatient",
+                user.getNomComplet());
+        }
         return "espace-patient";
     }
 
@@ -40,20 +65,17 @@ public class PatientEspaceController {
     @GetMapping("/mes-rendezvous")
     public String mesRendezVous(Model model,
             Authentication auth) {
-        // Trouver l'utilisateur connecté
+
         Utilisateur user = utilisateurRepository
             .findByUsername(auth.getName());
-        // Trouver sa fiche patient par email
         Patient patient = patientRepository
             .findByEmail(user.getEmail());
 
         if (patient != null) {
-            // Afficher SEULEMENT ses RDV
             model.addAttribute("rendezvous",
                 rendezVousService
                     .getRDVParPatient(patient.getId()));
         } else {
-            // Aucun RDV
             model.addAttribute("rendezvous",
                 new java.util.ArrayList<>());
         }
@@ -64,15 +86,13 @@ public class PatientEspaceController {
     @GetMapping("/mes-ordonnances")
     public String mesOrdonnances(Model model,
             Authentication auth) {
-        // Trouver l'utilisateur connecté
+
         Utilisateur user = utilisateurRepository
             .findByUsername(auth.getName());
-        // Trouver sa fiche patient par email
         Patient patient = patientRepository
             .findByEmail(user.getEmail());
 
         if (patient != null) {
-            // Afficher SEULEMENT ses ordonnances
             model.addAttribute("ordonnances",
                 ordonnanceService
                     .getOrdonnancesParPatient(
@@ -90,7 +110,17 @@ public class PatientEspaceController {
             Authentication auth) {
         Utilisateur user = utilisateurRepository
             .findByUsername(auth.getName());
+        Patient patient = patientRepository
+            .findByEmail(user.getEmail());
+
         model.addAttribute("user", user);
+        if (patient != null) {
+            model.addAttribute("photo",
+                patient.getPhoto() != null ?
+                patient.getPhoto() : "default.jpg");
+        } else {
+            model.addAttribute("photo", "default.jpg");
+        }
         return "patient/mon-profil";
     }
 
