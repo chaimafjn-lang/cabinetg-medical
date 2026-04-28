@@ -28,6 +28,9 @@ public class Patient {
     private LocalDate dateNaissance;
     private String telephone;
     private String email;
+ // Photo du patient
+ // Nom du fichier stocké sur le serveur
+ private String photo = "default.jpg";
 
     @Column(columnDefinition = "TEXT")  // TEXT = peut contenir un long texte dans MySQL
     private String antecedents;

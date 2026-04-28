@@ -51,4 +51,6 @@ public interface RendezVousRepository
 
     // Trouver RDV par token
     RendezVous findByToken(String token);
+ // Supprimer tous les RDV d'un patient
+    void deleteByPatientId(Long patientId);
 }

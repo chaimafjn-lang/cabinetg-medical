@@ -2,19 +2,24 @@ package com.fst.cabinet.service;
 
 import com.fst.cabinet.entity.Patient;
 import com.fst.cabinet.repository.PatientRepository;
+import com.fst.cabinet.repository.RendezVousRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
-// @Service dit à Spring que cette classe contient la logique métier
 @Service
 public class PatientService {
 
-    // Spring injecte automatiquement le repository
+    // ✅ Déclaration correcte des repositories
     private final PatientRepository patientRepository;
+    private final RendezVousRepository rendezVousRepository;
 
-    // Constructeur — Spring injecte PatientRepository ici
-    public PatientService(PatientRepository patientRepository) {
+    // ✅ Constructeur avec injection
+    public PatientService(
+            PatientRepository patientRepository,
+            RendezVousRepository rendezVousRepository) {
         this.patientRepository = patientRepository;
+        this.rendezVousRepository = rendezVousRepository;
     }
 
     // Récupérer tous les patients
@@ -22,28 +27,37 @@ public class PatientService {
         return patientRepository.findAll();
     }
 
-    // Récupérer un patient par son id
+    // Récupérer un patient par id
     public Patient getPatientParId(Long id) {
         return patientRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Patient non trouvé"));
+                .orElseThrow(() ->
+                    new RuntimeException(
+                        "Patient non trouvé"));
     }
 
-    // Sauvegarder un patient (ajout ou modification)
+    // Sauvegarder un patient
     public Patient sauvegarder(Patient patient) {
-        // Vérifier que le CIN n'existe pas déjà
-        Patient existant = patientRepository.findByCin(patient.getCin());
-        if (existant != null && !existant.getId().equals(patient.getId())) {
-            throw new RuntimeException("Un patient avec ce CIN existe déjà !");
+        Patient existant = patientRepository
+            .findByCin(patient.getCin());
+        if (existant != null &&
+                !existant.getId()
+                    .equals(patient.getId())) {
+            throw new RuntimeException(
+                "Un patient avec ce CIN existe déjà !");
         }
         return patientRepository.save(patient);
     }
 
-    // Supprimer un patient par son id
+    // ✅ Supprimer patient + ses RDV
+    @Transactional
     public void supprimer(Long id) {
+        // 1. Supprimer d'abord les RDV du patient
+        rendezVousRepository.deleteByPatientId(id);
+        // 2. Ensuite supprimer le patient
         patientRepository.deleteById(id);
     }
 
-    // Rechercher des patients par mot clé
+    // Rechercher des patients
     public List<Patient> rechercher(String mot) {
         return patientRepository.rechercher(mot);
     }
