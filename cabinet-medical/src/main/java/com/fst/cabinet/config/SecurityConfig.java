@@ -37,7 +37,7 @@ public class SecurityConfig {
                     new AntPathRequestMatcher("/css/**"),
                     new AntPathRequestMatcher("/js/**"),
                     new AntPathRequestMatcher("/images/**"),
-                    // ✅ Confirmation RDV sans login
+                    new AntPathRequestMatcher("/photos/**"),
                     new AntPathRequestMatcher("/rdv/confirmer"),
                     new AntPathRequestMatcher("/rdv/annuler-email")
                 ).permitAll()
@@ -45,20 +45,24 @@ public class SecurityConfig {
                 .requestMatchers(
                     new AntPathRequestMatcher("/admin/**"))
                     .hasRole("ADMIN")
-                // Pages médecin et admin
+                // ✅ Médecins → ADMIN + MEDECIN + SECRETAIRE
                 .requestMatchers(
                     new AntPathRequestMatcher("/medecins/**"))
-                    .hasAnyRole("ADMIN", "MEDECIN")
-                // Pages secrétaire, médecin et admin
+                    .hasAnyRole("ADMIN", "MEDECIN", "SECRETAIRE")
+                // Patients → ADMIN + MEDECIN + SECRETAIRE
                 .requestMatchers(
                     new AntPathRequestMatcher("/patients/**"))
                     .hasAnyRole("ADMIN", "MEDECIN", "SECRETAIRE")
-                // RDV accessible à tous les connectés
+                // Ordonnances → ADMIN + MEDECIN
+                .requestMatchers(
+                    new AntPathRequestMatcher("/ordonnances/**"))
+                    .hasAnyRole("ADMIN", "MEDECIN")
+                // RDV → tous les connectés
                 .requestMatchers(
                     new AntPathRequestMatcher("/rendezvous/**"))
                     .hasAnyRole("ADMIN", "MEDECIN",
                         "SECRETAIRE", "PATIENT")
-                // Tout le reste nécessite connexion
+                // Tout le reste → connecté
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
