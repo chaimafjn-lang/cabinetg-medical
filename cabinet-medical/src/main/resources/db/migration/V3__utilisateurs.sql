@@ -18,6 +18,7 @@ VALUES
     'admin@cabinet.tn',
     'ADMIN',
     true
+    
 ),
 (
     'medecin',

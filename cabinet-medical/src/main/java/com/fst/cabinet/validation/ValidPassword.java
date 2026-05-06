@@ -1,4 +1,4 @@
-// ValidPassword.java
+
 package com.fst.cabinet.validation;
 
 import jakarta.validation.Constraint;

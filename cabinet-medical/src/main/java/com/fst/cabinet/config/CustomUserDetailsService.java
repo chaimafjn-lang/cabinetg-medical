@@ -9,6 +9,7 @@ import java.util.List;
 
 // Cette classe dit à Spring Security comment
 // chercher un utilisateur dans la base de données
+// 
 @Service
 public class CustomUserDetailsService 
     implements UserDetailsService {

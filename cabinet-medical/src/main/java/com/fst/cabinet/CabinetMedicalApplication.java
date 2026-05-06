@@ -22,5 +22,6 @@ public class CabinetMedicalApplication {
 
 //Mot de passe : Secretaire@2026
 
+// telkaw houni les mots de passes
 //compte chaima pass Chimo@123
  
