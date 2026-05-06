@@ -153,7 +153,7 @@ Puis mettre à jour en base :
 sqlUPDATE utilisateurs SET password = 'HASH_GENERE' WHERE username = 'nom_utilisateur';
 
 🗂️ Scripts Flyway
-ScriptDescriptionV1__init.sqlCréation des tables principalesV2__data.sqlDonnées de test (médecins, patients)V3__utilisateurs.sqlTable utilisateurs + comptes par défautV4__token_rappel.sqlColonnes token et rappel emailV5__photo_patient.sqlColonne photo dans patientsV6__reset_passwords.sqlMise à jour des hash BCrypt (nouveaux mots de passe complexes)
+ScriptDescriptionV1__init.sqlCréation des tables principalesV2__data.sqlDonnées de test (médecins, patients)V3__utilisateurs.sqlTable utilisateurs + comptes par défautV4__token_rappel.sqlColonnes token et rappel emailV5__photo_patient.sqlColonne photo
 
 🚀 Lancement
 bash# Cloner le projet
