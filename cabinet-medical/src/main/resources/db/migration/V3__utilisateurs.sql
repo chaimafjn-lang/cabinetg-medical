@@ -13,7 +13,7 @@ INSERT INTO utilisateurs
 VALUES
 (
     'admin',
-    '$2a$10$dXJ3SW6G7P50lGmMkkmwe.20cQQubK3.HZWzG3YB1tlRy.fqvM/BG',
+    '$2a$10$kSal8QzKqmtiKVlpHvQR2ezIIpm2j7YXdre5T8OHZ/NAK9IR3l3n6',
     'Administrateur',
     'admin@cabinet.tn',
     'ADMIN',
@@ -21,7 +21,7 @@ VALUES
 ),
 (
     'medecin',
-    '$2a$10$dXJ3SW6G7P50lGmMkkmwe.20cQQubK3.HZWzG3YB1tlRy.fqvM/BG',
+    '$2a$10$9673WMdmCJraXL.RajClM.s8yKUgGFDqXsz7NFo2R1VKIX1qLQ4Mi',
     'Dr Ben Ali Mohamed',
     'benali@cabinet.tn',
     'MEDECIN',
@@ -29,7 +29,7 @@ VALUES
 ),
 (
     'secretaire',
-    '$2a$10$dXJ3SW6G7P50lGmMkkmwe.20cQQubK3.HZWzG3YB1tlRy.fqvM/BG',
+    '$2a$10$wagiWGMke4EP0lcE3htohubmVWulwCwa7FPg7ZtgGYuHf6xtYXrYu',
     'Secrétaire',
     'secretaire@cabinet.tn',
     'SECRETAIRE',

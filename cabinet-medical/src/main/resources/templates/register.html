@@ -129,10 +129,26 @@
                                 <label>
                                     Mot de passe *
                                 </label>
-                                <input type="password"
-                                       th:field="*{password}"
-                                       class="form-control"
-                                       required>
+                               <input type="password" 
+       id="rawPassword" 
+       name="rawPassword" 
+       th:field="*{rawPassword}"
+       class="form-control" 
+       placeholder="Ex: Cabinet@2024" required>
+
+<!-- Message d'erreur de validation -->
+<div th:if="${#fields.hasErrors('rawPassword')}" class="text-danger small mt-1">
+    <span th:errors="*{rawPassword}"></span>
+</div>
+<div th:if="${erreurPassword}" class="text-danger small mt-1">
+    <span th:text="${erreurPassword}"></span>
+</div>
+<div th:if="${erreurUsername}" class="text-danger small mt-1">
+    <span th:text="${erreurUsername}"></span>
+</div>
+<small class="text-muted">
+    8 caractères min · 1 majuscule · 1 minuscule · 1 chiffre · 1 caractère spécial
+</small>
                             </div>
                         </div>
 

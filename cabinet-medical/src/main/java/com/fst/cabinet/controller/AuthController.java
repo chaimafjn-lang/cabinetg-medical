@@ -5,123 +5,96 @@ import com.fst.cabinet.entity.Utilisateur;
 import com.fst.cabinet.repository.PatientRepository;
 import com.fst.cabinet.repository.UtilisateurRepository;
 import com.fst.cabinet.service.PhotoService;
-import org.springframework.security.crypto.password
-    .PasswordEncoder;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import java.time.LocalDateTime;
+import java.io.IOException;
 
 @Controller
+@RequiredArgsConstructor
 public class AuthController {
 
-    private final UtilisateurRepository
-        utilisateurRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final UtilisateurRepository utilisateurRepository;
     private final PatientRepository patientRepository;
+    private final PasswordEncoder passwordEncoder;
     private final PhotoService photoService;
 
-    public AuthController(
-            UtilisateurRepository utilisateurRepository,
-            PasswordEncoder passwordEncoder,
-            PatientRepository patientRepository,
-            PhotoService photoService) {
-        this.utilisateurRepository = utilisateurRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.patientRepository = patientRepository;
-        this.photoService = photoService;
-    }
-
-    // ===== PAGE ACCUEIL =====
+    // ✅ AJOUT — gère / et /accueil
     @GetMapping({"/", "/accueil"})
     public String accueil() {
         return "accueil";
     }
 
-    // ===== PAGE LOGIN =====
     @GetMapping("/login")
     public String login() {
         return "login";
     }
 
-    // ===== PAGE REGISTER =====
     @GetMapping("/register")
-    public String registerFormulaire(Model model) {
-        model.addAttribute("utilisateur",
-            new Utilisateur());
+    public String registerForm(Model model) {
+        model.addAttribute("utilisateur", new Utilisateur());
         return "register";
     }
 
-    // ===== SAUVEGARDER INSCRIPTION =====
-    // multipart/form-data pour la photo
     @PostMapping("/register")
     public String register(
-            @ModelAttribute Utilisateur utilisateur,
+            @Valid @ModelAttribute("utilisateur") Utilisateur utilisateur,
+            BindingResult bindingResult,
             @RequestParam String cin,
             @RequestParam String telephone,
-            @RequestParam(required = false)
-                MultipartFile photo,
-            Model model) {
+            @RequestParam(required = false) MultipartFile photo,
+            Model model) throws IOException {
 
-        // Vérifier username unique
-        if (utilisateurRepository
-                .findByUsername(
-                    utilisateur.getUsername()) != null) {
-            model.addAttribute("erreur",
-                "Ce nom d'utilisateur existe déjà !");
+        if (bindingResult.hasErrors()) {
             return "register";
         }
 
-        // Vérifier CIN unique
-        if (patientRepository.findByCin(cin) != null) {
-            model.addAttribute("erreur",
-                "Ce CIN existe déjà !");
+        if (utilisateurRepository.findByUsername(utilisateur.getUsername()) != null) {
+            model.addAttribute("erreurUsername", "Ce nom d'utilisateur est déjà utilisé");
             return "register";
         }
 
-        // Crypter le mot de passe
-        utilisateur.setPassword(
-            passwordEncoder.encode(
-                utilisateur.getPassword()));
+        String motDePasse = utilisateur.getRawPassword();
+        String username   = utilisateur.getUsername().toLowerCase();
+
+        if (motDePasse.toLowerCase().contains(username)) {
+            model.addAttribute("erreurPassword",
+                "Le mot de passe ne doit pas contenir votre nom d'utilisateur");
+            return "register";
+        }
+
+        if (utilisateur.getEmail() != null && utilisateur.getEmail().contains("@")) {
+            String emailLocal = utilisateur.getEmail().split("@")[0].toLowerCase();
+            if (motDePasse.toLowerCase().contains(emailLocal)) {
+                model.addAttribute("erreurPassword",
+                    "Le mot de passe ne doit pas contenir votre nom écrit dans l'email");
+                return "register";
+            }
+        }
+
+        utilisateur.setPassword(passwordEncoder.encode(motDePasse));
         utilisateur.setRole("PATIENT");
-        utilisateur.setActif(true);
         utilisateurRepository.save(utilisateur);
 
-        // Créer fiche Patient
         Patient patient = new Patient();
-        String nomComplet = utilisateur.getNomComplet();
-        if (nomComplet != null &&
-                nomComplet.contains(" ")) {
-            String[] parts = nomComplet.split(" ", 2);
-            patient.setPrenom(parts[0]);
-            patient.setNom(parts[1]);
-        } else {
-            patient.setNom(nomComplet != null ?
-                nomComplet : "");
-            patient.setPrenom("");
-        }
+        String[] parts = utilisateur.getNomComplet() != null
+            ? utilisateur.getNomComplet().split(" ", 2)
+            : new String[]{"", ""};
+        patient.setPrenom(parts[0]);
+        patient.setNom(parts.length > 1 ? parts[1] : "");
         patient.setEmail(utilisateur.getEmail());
         patient.setCin(cin);
         patient.setTelephone(telephone);
-        patient.setDateCreation(LocalDateTime.now());
 
-        // Sauvegarder la photo
-        try {
-            String nomPhoto = photoService
-                .sauvegarderPhoto(photo);
-            patient.setPhoto(nomPhoto);
-        } catch (Exception e) {
-            // Si erreur photo → photo par défaut
-            patient.setPhoto("default.jpg");
-            model.addAttribute("avertissement",
-                "Photo non sauvegardée : " 
-                + e.getMessage());
-        }
-
+        String nomPhoto = photoService.sauvegarderPhoto(photo);
+        patient.setPhoto(nomPhoto);
         patientRepository.save(patient);
 
         return "redirect:/login?registered";
     }
 }
-
