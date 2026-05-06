@@ -8,29 +8,27 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface RendezVousRepository
-    extends JpaRepository<RendezVous, Long> {
+        extends JpaRepository<RendezVous, Long> {
 
-    // RDV d'un médecin
     List<RendezVous> findByMedecinId(Long medecinId);
 
-    // RDV d'un patient
     List<RendezVous> findByPatientId(Long patientId);
 
-    // RDV d'aujourd'hui
     @Query("SELECT r FROM RendezVous r WHERE " +
            "DATE(r.dateHeure) = CURRENT_DATE " +
            "AND r.statut != 'ANNULE' " +
            "ORDER BY r.dateHeure")
     List<RendezVous> findRDVAujourdhui();
 
-    // Vérifier chevauchement
-    @Query("SELECT r FROM RendezVous r WHERE " +
-           "r.medecin.id = :medecinId AND " +
-           "r.statut != 'ANNULE' AND " +
-           "r.id != :rdvId AND (" +
-           "(:debut < FUNCTION('ADDTIME', r.dateHeure, " +
-           "FUNCTION('SEC_TO_TIME', r.dureeMinutes * 60))) AND " +
-           "(:fin > r.dateHeure))")
+    // ✅ VERSION CORRIGÉE — SQL natif MySQL
+    @Query(value =
+        "SELECT * FROM rendez_vous r WHERE " +
+        "r.medecin_id = :medecinId AND " +
+        "r.statut != 'ANNULE' AND " +
+        "r.id != :rdvId AND " +
+        ":debut < DATE_ADD(r.date_heure, INTERVAL r.duree_minutes MINUTE) AND " +
+        ":fin > r.date_heure",
+        nativeQuery = true)
     List<RendezVous> findChevauchements(
         @Param("medecinId") Long medecinId,
         @Param("debut") LocalDateTime debut,
@@ -38,7 +36,6 @@ public interface RendezVousRepository
         @Param("rdvId") Long rdvId
     );
 
-    // RDV pour rappel (dans 15 min, pas envoyé)
     @Query("SELECT r FROM RendezVous r WHERE " +
            "r.dateHeure BETWEEN :debut AND :fin AND " +
            "r.rappelEnvoye = false AND " +
@@ -49,8 +46,7 @@ public interface RendezVousRepository
         @Param("fin") LocalDateTime fin
     );
 
-    // Trouver RDV par token
     RendezVous findByToken(String token);
- // Supprimer tous les RDV d'un patient
+
     void deleteByPatientId(Long patientId);
 }
