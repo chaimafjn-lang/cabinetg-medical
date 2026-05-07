@@ -2,294 +2,387 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Cabinet Médical</title>
+    <title>FaNaCha TrioCare</title>
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --rose:        #e8789a;
+            --rose-light:  #f4a7bc;
+            --rose-pale:   #fce8f0;
+            --rose-deep:   #c95480;
+            --rose-soft:   #fdf0f5;
+            --cream:       #fff8fb;
+            --text-dark:   #2d1a22;
+            --text-mid:    #7a4f60;
+            --text-light:  #b8849a;
+            --white:       #ffffff;
+        }
 
-        /* NAVBAR */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text-dark); }
+
+        /* ── NAVBAR ── */
         .navbar {
-            background: linear-gradient(135deg, #1a73e8, #0d47a1) !important;
-            padding: 15px 0;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.2);
+            background: rgba(255,255,255,0.92) !important;
+            backdrop-filter: blur(16px);
+            padding: 14px 0;
+            box-shadow: 0 2px 20px rgba(232,120,154,0.12);
+            border-bottom: 1px solid rgba(232,120,154,0.15);
         }
         .navbar-brand {
-            font-size: 1.5rem;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
             font-weight: 700;
-            letter-spacing: 1px;
+            color: var(--rose-deep) !important;
+            letter-spacing: 0.5px;
+        }
+        .nav-link { color: var(--text-mid) !important; font-weight: 500; transition: color .2s; }
+        .nav-link:hover { color: var(--rose-deep) !important; }
+
+        .btn-nav-login {
+            border: 2px solid var(--rose);
+            color: var(--rose-deep);
+            border-radius: 50px;
+            padding: 8px 22px;
+            font-weight: 600;
+            transition: all .3s;
+            background: transparent;
+        }
+        .btn-nav-login:hover {
+            background: var(--rose-pale);
+            color: var(--rose-deep);
+            border-color: var(--rose-deep);
+        }
+        .btn-nav-register {
+            background: linear-gradient(135deg, var(--rose), var(--rose-deep));
+            color: white !important;
+            border-radius: 50px;
+            padding: 8px 22px;
+            font-weight: 600;
+            border: none;
+            transition: all .3s;
+            box-shadow: 0 4px 15px rgba(232,120,154,0.35);
+        }
+        .btn-nav-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(232,120,154,0.45);
+            color: white !important;
         }
 
-        /* HERO */
+        /* ── HERO ── */
         .hero {
-            background: linear-gradient(135deg, #1a73e8 0%, #0d47a1 100%);
+            background: linear-gradient(135deg, #fce8f0 0%, #fdf0f5 40%, #fff4f8 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
+            padding-top: 80px;
             position: relative;
             overflow: hidden;
         }
         .hero::before {
             content: '';
             position: absolute;
-            top: -50%;
-            right: -20%;
-            width: 600px;
-            height: 600px;
-            background: rgba(255,255,255,0.05);
+            top: -100px; right: -150px;
+            width: 550px; height: 550px;
+            background: radial-gradient(circle, rgba(232,120,154,0.18) 0%, transparent 70%);
             border-radius: 50%;
         }
         .hero::after {
             content: '';
             position: absolute;
-            bottom: -30%;
-            left: -10%;
-            width: 400px;
-            height: 400px;
-            background: rgba(255,255,255,0.05);
+            bottom: -80px; left: -100px;
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(244,167,188,0.15) 0%, transparent 70%);
             border-radius: 50%;
         }
-        .hero-content {
-            position: relative;
-            z-index: 2;
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(232,120,154,0.12);
+            border: 1px solid rgba(232,120,154,0.3);
+            border-radius: 50px;
+            padding: 8px 18px;
+            font-size: 0.88rem;
+            font-weight: 500;
+            color: var(--rose-deep);
+            margin-bottom: 24px;
         }
         .hero h1 {
-            font-size: 3.5rem;
+            font-family: 'Playfair Display', serif;
+            font-size: 3.6rem;
             font-weight: 800;
-            line-height: 1.2;
-            text-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+            line-height: 1.15;
+            color: var(--text-dark);
         }
-        .hero p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
-        .hero-image {
-            position: relative;
-            z-index: 2;
-        }
-        .hero-image img {
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            border: 4px solid rgba(255,255,255,0.2);
-        }
+        .hero h1 span { color: var(--rose-deep); }
+        .hero p { font-size: 1.1rem; color: var(--text-mid); line-height: 1.8; max-width: 480px; }
+
         .btn-hero-primary {
-            background: white;
-            color: #1a73e8;
-            padding: 14px 35px;
+            background: linear-gradient(135deg, var(--rose), var(--rose-deep));
+            color: white;
+            padding: 14px 34px;
             border-radius: 50px;
             font-weight: 700;
             font-size: 1rem;
             border: none;
-            transition: all 0.3s;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            transition: all .3s;
+            box-shadow: 0 6px 25px rgba(201,84,128,0.35);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
         .btn-hero-primary:hover {
             transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            color: #1a73e8;
+            box-shadow: 0 12px 35px rgba(201,84,128,0.45);
+            color: white;
         }
         .btn-hero-secondary {
-            background: transparent;
-            color: white;
-            padding: 14px 35px;
+            background: white;
+            color: var(--rose-deep);
+            padding: 14px 34px;
             border-radius: 50px;
             font-weight: 700;
             font-size: 1rem;
-            border: 2px solid white;
-            transition: all 0.3s;
+            border: 2px solid var(--rose);
+            transition: all .3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
         .btn-hero-secondary:hover {
-            background: white;
-            color: #1a73e8;
+            background: var(--rose-pale);
             transform: translateY(-3px);
+            color: var(--rose-deep);
         }
 
-        /* STATS */
-        .stats-section {
-            background: white;
-            padding: 40px 0;
-            box-shadow: 0 5px 30px rgba(0,0,0,0.08);
-        }
-        .stat-item {
-            text-align: center;
-            padding: 20px;
-            border-right: 1px solid #eee;
-        }
-        .stat-item:last-child { border-right: none; }
-        .stat-number {
-            font-size: 2.5rem;
+        .hero-stats { display: flex; gap: 32px; margin-top: 48px; }
+        .hero-stat { text-align: center; }
+        .hero-stat-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
             font-weight: 800;
-            color: #1a73e8;
+            color: var(--rose-deep);
         }
-        .stat-label {
-            color: #666;
-            font-size: 0.9rem;
-            margin-top: 5px;
+        .hero-stat-label { font-size: 0.82rem; color: var(--text-light); margin-top: 2px; font-weight: 500; }
+        .hero-stat-divider { width: 1px; background: rgba(232,120,154,0.3); margin: 0 4px; }
+
+        .hero-image img {
+            border-radius: 24px;
+            box-shadow: 0 25px 70px rgba(201,84,128,0.2);
+            border: 5px solid rgba(232,120,154,0.15);
+            width: 100%;
+            object-fit: cover;
+            max-height: 500px;
         }
 
-        /* SERVICES */
+        /* ── SERVICES ── */
         .services-section {
-            padding: 80px 0;
-            background: #f8f9fa;
+            padding: 90px 0;
+            background: white;
+        }
+        .section-label {
+            display: inline-block;
+            background: var(--rose-pale);
+            color: var(--rose-deep);
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 6px 16px;
+            border-radius: 50px;
+            margin-bottom: 16px;
         }
         .section-title {
-            font-size: 2.2rem;
+            font-family: 'Playfair Display', serif;
+            font-size: 2.3rem;
             font-weight: 800;
-            color: #1a1a2e;
-            margin-bottom: 10px;
+            color: var(--text-dark);
         }
-        .section-subtitle {
-            color: #666;
-            font-size: 1.1rem;
-            margin-bottom: 50px;
-        }
+        .section-subtitle { color: var(--text-mid); font-size: 1.05rem; margin-top: 10px; }
+
         .service-card {
-            background: white;
+            background: var(--rose-soft);
             border-radius: 20px;
-            padding: 40px 30px;
+            padding: 36px 28px;
             text-align: center;
-            box-shadow: 0 5px 30px rgba(0,0,0,0.08);
-            transition: all 0.3s;
-            border: none;
+            transition: all .3s;
+            border: 1.5px solid transparent;
             height: 100%;
         }
         .service-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(232,120,154,0.18);
+            border-color: rgba(232,120,154,0.3);
+            background: white;
         }
         .service-icon {
-            width: 80px;
-            height: 80px;
-            border-radius: 20px;
+            width: 72px; height: 72px;
+            border-radius: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 25px;
-            font-size: 2rem;
+            margin: 0 auto 22px;
+            font-size: 1.7rem;
+            background: linear-gradient(135deg, var(--rose-pale), rgba(232,120,154,0.12));
         }
         .service-card h5 {
-            font-size: 1.2rem;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
             font-weight: 700;
-            color: #1a1a2e;
-            margin-bottom: 15px;
+            color: var(--text-dark);
+            margin-bottom: 12px;
         }
-        .service-card p {
-            color: #666;
-            font-size: 0.95rem;
-            line-height: 1.7;
-        }
+        .service-card p { color: var(--text-mid); font-size: 0.93rem; line-height: 1.7; }
 
-        /* DOCTORS */
-        .doctors-section {
-            padding: 80px 0;
-            background: white;
-        }
+        /* ── DOCTORS ── */
+        .doctors-section { padding: 90px 0; background: var(--rose-soft); }
+
         .doctor-card {
             border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 5px 30px rgba(0,0,0,0.1);
-            transition: all 0.3s;
-            border: none;
+            box-shadow: 0 8px 30px rgba(201,84,128,0.1);
+            transition: all .3s;
+            border: 1.5px solid rgba(232,120,154,0.12);
+            background: white;
         }
         .doctor-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(201,84,128,0.2);
         }
-        .doctor-img {
-            width: 100%;
-            height: 220px;
-            object-fit: cover;
-        }
-        .doctor-info {
-            padding: 20px;
-            text-align: center;
-        }
+        .doctor-img { width: 100%; height: 220px; object-fit: cover; }
+        .doctor-info { padding: 20px; text-align: center; }
         .doctor-name {
+            font-family: 'Playfair Display', serif;
             font-weight: 700;
-            font-size: 1.1rem;
-            color: #1a1a2e;
+            font-size: 1.05rem;
+            color: var(--text-dark);
         }
         .doctor-specialty {
-            color: #1a73e8;
-            font-size: 0.9rem;
+            color: var(--rose-deep);
+            font-size: 0.88rem;
             font-weight: 600;
+            margin-top: 5px;
         }
 
-        /* CTA */
+        /* ── CTA ── */
         .cta-section {
-            background: linear-gradient(135deg, #1a73e8, #0d47a1);
-            padding: 80px 0;
+            background: linear-gradient(135deg, var(--rose) 0%, var(--rose-deep) 100%);
+            padding: 90px 0;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -60px; right: -60px;
+            width: 300px; height: 300px;
+            background: rgba(255,255,255,0.07);
+            border-radius: 50%;
+        }
+        .cta-section::after {
+            content: '';
+            position: absolute;
+            bottom: -80px; left: -40px;
+            width: 250px; height: 250px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+        }
+        .btn-cta {
+            background: white;
+            color: var(--rose-deep);
+            padding: 14px 40px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            border: none;
+            transition: all .3s;
+            box-shadow: 0 6px 25px rgba(0,0,0,0.15);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            z-index: 2;
+        }
+        .btn-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.2);
+            color: var(--rose-deep);
         }
 
-        /* FOOTER */
+        /* ── FOOTER ── */
         footer {
-            background: #1a1a2e;
-            color: #aaa;
-            padding: 40px 0 20px;
+            background: var(--text-dark);
+            color: #c9a0b0;
+            padding: 50px 0 20px;
         }
         footer h6 {
+            font-family: 'Playfair Display', serif;
             color: white;
             font-weight: 700;
-            margin-bottom: 15px;
+            margin-bottom: 18px;
+            font-size: 1.05rem;
         }
         footer a {
-            color: #aaa;
+            color: #c9a0b0;
             text-decoration: none;
             display: block;
-            margin-bottom: 8px;
-            transition: color 0.3s;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            transition: color .2s;
         }
-        footer a:hover { color: #1a73e8; }
+        footer a:hover { color: var(--rose-light); }
+        footer p { font-size: 0.9rem; line-height: 1.8; }
         .footer-bottom {
-            border-top: 1px solid #333;
+            border-top: 1px solid rgba(255,255,255,0.08);
             padding-top: 20px;
             margin-top: 30px;
             text-align: center;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
+            color: #a07080;
         }
+        .footer-icon { color: var(--rose-light); margin-right: 8px; }
     </style>
 </head>
 <body>
 
 <!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+<nav class="navbar navbar-expand-lg fixed-top">
     <div class="container">
-        <a class="navbar-brand text-white" href="#">
-            <i class="fas fa-hospital-user me-2"></i>Cabinet Médical
+        <a class="navbar-brand" href="#">
+            <i class="fas fa-hospital-user me-2"></i>FaNaCha TrioCare
         </a>
-        <button class="navbar-toggler" type="button" 
-                data-bs-toggle="collapse" 
-                data-bs-target="#navMenu">
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navMenu"
+                style="border-color: rgba(232,120,154,0.4);">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navMenu">
             <ul class="navbar-nav me-auto ms-4">
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="#services">
-                        Services
-                    </a>
+                    <a class="nav-link" href="#services">Services</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="#medecins">
-                        Médecins
-                    </a>
+                    <a class="nav-link" href="#medecins">Médecins</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="#contact">
-                        Contact
-                    </a>
+                    <a class="nav-link" href="#contact">Contact</a>
                 </li>
             </ul>
-            <div class="d-flex gap-2">
-                <a th:href="@{/login}" 
-                   class="btn btn-outline-light rounded-pill px-4">
+            <div class="d-flex gap-2 align-items-center">
+                <a th:href="@{/login}" class="btn btn-nav-login">
                     <i class="fas fa-sign-in-alt me-1"></i>Connexion
                 </a>
-                <a th:href="@{/register}" 
-                   class="btn btn-light text-primary rounded-pill px-4 fw-bold">
+                <a th:href="@{/register}" class="btn btn-nav-register">
                     <i class="fas fa-user-plus me-1"></i>S'inscrire
                 </a>
             </div>
@@ -298,71 +391,54 @@
 </nav>
 
 <!-- HERO -->
-<section class="hero text-white" style="padding-top: 80px;">
+<section class="hero">
     <div class="container">
         <div class="row align-items-center min-vh-100">
-            <div class="col-lg-6 hero-content">
-                <div class="mb-3">
-                    <span class="badge rounded-pill px-3 py-2"
-                          style="background:rgba(255,255,255,0.2); font-size:0.9rem;">
-                        <i class="fas fa-star me-1"></i>
-                        Cabinet de confiance depuis 2010
-                    </span>
+            <div class="col-lg-6" style="position:relative;z-index:2;">
+                <div class="hero-badge">
+                    <i class="fas fa-star" style="color:var(--rose);"></i>
+                    Cabinet de confiance depuis 2010
                 </div>
                 <h1 class="mb-4">
-                    Votre santé,<br>
-                    <span style="color:#90caf9;">notre priorité</span>
+                    FaNaCha,<br>
+                    <span>TrioCare</span>
                 </h1>
                 <p class="mb-5">
-                    Prenez rendez-vous en ligne avec nos médecins 
-                    spécialisés. Un suivi médical personnalisé et 
-                    de qualité pour toute la famille.
+                    Prenez rendez-vous en ligne avec nos médecins spécialisés.
+                    Un suivi médical personnalisé et de qualité pour toute la famille.
                 </p>
                 <div class="d-flex gap-3 flex-wrap">
-                    <a th:href="@{/register}" class="btn-hero-primary btn">
-                        <i class="fas fa-calendar-plus me-2"></i>
-                        Prendre RDV
+                    <a th:href="@{/register}" class="btn-hero-primary">
+                        <i class="fas fa-calendar-plus"></i>Prendre RDV
                     </a>
-                    <a th:href="@{/login}" class="btn-hero-secondary btn">
-                        <i class="fas fa-sign-in-alt me-2"></i>
-                        Se connecter
+                    <a th:href="@{/login}" class="btn-hero-secondary">
+                        <i class="fas fa-sign-in-alt"></i>Se connecter
                     </a>
                 </div>
-                <div class="row mt-5 g-3">
-                    <div class="col-4 text-center">
-                        <div style="font-size:1.8rem; font-weight:800;">
-                            500+
-                        </div>
-                        <div style="opacity:0.8; font-size:0.85rem;">
-                            Patients
-                        </div>
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <div class="hero-stat-number">500+</div>
+                        <div class="hero-stat-label">Patients</div>
                     </div>
-                    <div class="col-4 text-center" 
-                         style="border-left:1px solid rgba(255,255,255,0.3);
-                                border-right:1px solid rgba(255,255,255,0.3);">
-                        <div style="font-size:1.8rem; font-weight:800;">
-                            10+
-                        </div>
-                        <div style="opacity:0.8; font-size:0.85rem;">
-                            Médecins
-                        </div>
+                    <div class="hero-stat-divider"></div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-number">10+</div>
+                        <div class="hero-stat-label">Médecins</div>
                     </div>
-                    <div class="col-4 text-center">
-                        <div style="font-size:1.8rem; font-weight:800;">
-                            15
-                        </div>
-                        <div style="opacity:0.8; font-size:0.85rem;">
-                            Ans d'expérience
-                        </div>
+                    <div class="hero-stat-divider"></div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-number">15</div>
+                        <div class="hero-stat-label">Ans d'expérience</div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6 hero-image text-center mt-5 mt-lg-0">
-                <img src="https://img.freepik.com/free-photo/medical-team-discussing-patient-case_23-2148980774.jpg"
+            <div class="col-lg-6 text-center mt-5 mt-lg-0" style="position:relative;z-index:2;">
+                <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800"
                      alt="Médecins"
                      class="img-fluid"
-                     style="border-radius:20px; 
-                            box-shadow:0 20px 60px rgba(0,0,0,0.3);
+                     style="border-radius:24px;
+                            box-shadow:0 25px 70px rgba(201,84,128,0.2);
+                            border:5px solid rgba(232,120,154,0.15);
                             max-height:500px; width:100%; object-fit:cover;">
             </div>
         </div>
@@ -372,105 +448,83 @@
 <!-- SERVICES -->
 <section class="services-section" id="services">
     <div class="container">
-        <div class="text-center">
-            <h2 class="section-title">Nos Services</h2>
-            <p class="section-subtitle">
-                Des soins de qualité pour votre bien-être
-            </p>
+        <div class="text-center mb-5">
+            <div class="section-label">Nos Services</div>
+            <h2 class="section-title">Des soins de qualité</h2>
+            <p class="section-subtitle">Pour votre bien-être et celui de votre famille</p>
         </div>
         <div class="row g-4">
             <div class="col-md-4">
                 <div class="service-card">
-                    <div class="service-icon" 
-                         style="background:#e3f2fd;">
-                        <i class="fas fa-calendar-check" 
-                           style="color:#1a73e8;"></i>
+                    <div class="service-icon">
+                        <i class="fas fa-calendar-check" style="color:var(--rose-deep);"></i>
                     </div>
                     <h5>Rendez-vous en ligne</h5>
-                    <p>Réservez votre consultation en quelques clics, 
-                       24h/24 et 7j/7 depuis chez vous.</p>
+                    <p>Réservez votre consultation en quelques clics, 24h/24 et 7j/7 depuis chez vous.</p>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="service-card">
-                    <div class="service-icon" 
-                         style="background:#e8f5e9;">
-                        <i class="fas fa-user-md" 
-                           style="color:#2e7d32;"></i>
+                    <div class="service-icon">
+                        <i class="fas fa-user-md" style="color:var(--rose-deep);"></i>
                     </div>
                     <h5>Médecins Spécialisés</h5>
-                    <p>Une équipe de médecins experts dans 
-                       différentes spécialités médicales.</p>
+                    <p>Une équipe de médecins experts dans différentes spécialités médicales.</p>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="service-card">
-                    <div class="service-icon" 
-                         style="background:#fce4ec;">
-                        <i class="fas fa-file-medical" 
-                           style="color:#c62828;"></i>
+                    <div class="service-icon">
+                        <i class="fas fa-file-medical" style="color:var(--rose-deep);"></i>
                     </div>
                     <h5>Dossier Médical</h5>
-                    <p>Accédez à votre historique médical et 
-                       ordonnances à tout moment en ligne.</p>
+                    <p>Accédez à votre historique médical et ordonnances à tout moment en ligne.</p>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="service-card">
-                    <div class="service-icon" 
-                         style="background:#f3e5f5;">
-                        <i class="fas fa-prescription" 
-                           style="color:#7b1fa2;"></i>
+                    <div class="service-icon">
+                        <i class="fas fa-prescription" style="color:var(--rose-deep);"></i>
                     </div>
                     <h5>Ordonnances</h5>
-                    <p>Recevez et consultez vos ordonnances 
-                       directement depuis votre espace patient.</p>
+                    <p>Recevez et consultez vos ordonnances directement depuis votre espace patient.</p>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="service-card">
-                    <div class="service-icon" 
-                         style="background:#fff8e1;">
-                        <i class="fas fa-clock" 
-                           style="color:#f57f17;"></i>
+                    <div class="service-icon">
+                        <i class="fas fa-clock" style="color:var(--rose-deep);"></i>
                     </div>
                     <h5>Horaires Flexibles</h5>
-                    <p>Des créneaux disponibles matin, après-midi 
-                       et soir pour s'adapter à votre emploi du temps.</p>
+                    <p>Des créneaux disponibles matin, après-midi et soir pour s'adapter à votre emploi du temps.</p>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="service-card">
-                    <div class="service-icon" 
-                         style="background:#e0f7fa;">
-                        <i class="fas fa-shield-alt" 
-                           style="color:#00838f;"></i>
+                    <div class="service-icon">
+                        <i class="fas fa-shield-alt" style="color:var(--rose-deep);"></i>
                     </div>
                     <h5>Données Sécurisées</h5>
-                    <p>Vos données médicales sont protégées et 
-                       accessibles uniquement par vous et votre médecin.</p>
+                    <p>Vos données médicales sont protégées et accessibles uniquement par vous et votre médecin.</p>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- MEDECINS -->
+<!-- DOCTORS -->
 <section class="doctors-section" id="medecins">
     <div class="container">
-        <div class="text-center">
-            <h2 class="section-title">Notre Équipe Médicale</h2>
-            <p class="section-subtitle">
-                Des professionnels dédiés à votre santé
-            </p>
+        <div class="text-center mb-5">
+            <div class="section-label">Notre Équipe</div>
+            <h2 class="section-title">Nos Médecins</h2>
+            <p class="section-subtitle">Des professionnels dédiés à votre santé</p>
         </div>
         <div class="row g-4">
             <div class="col-md-4">
-                <div class="doctor-card card">
-                    <img src="https://img.freepik.com/free-photo/doctor-with-stethoscope_1134-2_jpg"
-                         class="doctor-img"
-                         alt="Médecin"
-                         onerror="this.src='https://via.placeholder.com/300x220/1a73e8/white?text=Dr.+Médecin'">
+                <div class="doctor-card">
+                    <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400"
+                         class="doctor-img" alt="Dr. Ben Ali Mohamed">
                     <div class="doctor-info">
                         <div class="doctor-name">Dr. Ben Ali Mohamed</div>
                         <div class="doctor-specialty">
@@ -480,11 +534,9 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="doctor-card card">
-                    <img src="https://img.freepik.com/free-photo/female-doctor-hospital_23-2148827776.jpg"
-                         class="doctor-img"
-                         alt="Médecin"
-                         onerror="this.src='https://via.placeholder.com/300x220/1a73e8/white?text=Dr.+Médecin'">
+                <div class="doctor-card">
+                    <img src="https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=400"
+                         class="doctor-img" alt="Dr. Trabelsi Sonia">
                     <div class="doctor-info">
                         <div class="doctor-name">Dr. Trabelsi Sonia</div>
                         <div class="doctor-specialty">
@@ -494,11 +546,9 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="doctor-card card">
-                    <img src="https://img.freepik.com/free-photo/doctor-stethoscope-hands_1232-2823.jpg"
-                         class="doctor-img"
-                         alt="Médecin"
-                         onerror="this.src='https://via.placeholder.com/300x220/1a73e8/white?text=Dr.+Médecin'">
+                <div class="doctor-card">
+                    <img src="https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=400"
+                         class="doctor-img" alt="Dr. Mansouri Karim">
                     <div class="doctor-info">
                         <div class="doctor-name">Dr. Mansouri Karim</div>
                         <div class="doctor-specialty">
@@ -513,19 +563,15 @@
 
 <!-- CTA -->
 <section class="cta-section">
-    <div class="container">
-        <h2 class="text-white fw-800 mb-3" 
-            style="font-size:2.2rem; font-weight:800;">
+    <div class="container" style="position:relative;z-index:2;">
+        <h2 class="text-white fw-bold mb-3" style="font-family:'Playfair Display',serif; font-size:2.3rem;">
             Prêt à prendre soin de votre santé ?
         </h2>
-        <p class="text-white mb-4" style="opacity:0.9; font-size:1.1rem;">
-            Créez votre compte gratuitement et prenez 
-            rendez-vous en quelques minutes
+        <p class="text-white mb-5" style="opacity:0.9; font-size:1.1rem; max-width:550px; margin:0 auto 32px;">
+            Créez votre compte gratuitement et prenez rendez-vous en quelques minutes
         </p>
-        <a th:href="@{/register}" 
-           class="btn btn-light btn-lg rounded-pill px-5 fw-bold"
-           style="color:#1a73e8;">
-            <i class="fas fa-user-plus me-2"></i>
+        <a th:href="@{/register}" class="btn-cta">
+            <i class="fas fa-user-plus"></i>
             Créer mon compte gratuitement
         </a>
     </div>
@@ -536,59 +582,26 @@
     <div class="container">
         <div class="row">
             <div class="col-md-4 mb-4">
-                <h6>
-                    <i class="fas fa-hospital-user me-2" 
-                       style="color:#1a73e8;"></i>
-                    Cabinet Médical
-                </h6>
-                <p style="font-size:0.9rem; line-height:1.7;">
-                    Un cabinet moderne au service de votre santé. 
-                    Nous vous offrons des soins de qualité dans 
-                    un environnement chaleureux.
-                </p>
+                <h6><i class="fas fa-hospital-user footer-icon"></i>Cabinet Médical</h6>
+                <p>Un cabinet moderne au service de votre santé. Nous vous offrons des soins de qualité dans un environnement chaleureux.</p>
             </div>
             <div class="col-md-4 mb-4">
                 <h6>Liens Rapides</h6>
-                <a th:href="@{/login}">
-                    <i class="fas fa-chevron-right me-1"></i>Connexion
-                </a>
-                <a th:href="@{/register}">
-                    <i class="fas fa-chevron-right me-1"></i>S'inscrire
-                </a>
-                <a href="#services">
-                    <i class="fas fa-chevron-right me-1"></i>Nos Services
-                </a>
-                <a href="#medecins">
-                    <i class="fas fa-chevron-right me-1"></i>Nos Médecins
-                </a>
+                <a th:href="@{/login}"><i class="fas fa-chevron-right me-1"></i>Connexion</a>
+                <a th:href="@{/register}"><i class="fas fa-chevron-right me-1"></i>S'inscrire</a>
+                <a href="#services"><i class="fas fa-chevron-right me-1"></i>Nos Services</a>
+                <a href="#medecins"><i class="fas fa-chevron-right me-1"></i>Nos Médecins</a>
             </div>
             <div class="col-md-4 mb-4">
                 <h6>Contact</h6>
-                <p style="font-size:0.9rem;">
-                    <i class="fas fa-map-marker-alt me-2" 
-                       style="color:#1a73e8;"></i>
-                    Tunis, Tunisie
-                </p>
-                <p style="font-size:0.9rem;">
-                    <i class="fas fa-phone me-2" 
-                       style="color:#1a73e8;"></i>
-                    +216 71 000 000
-                </p>
-                <p style="font-size:0.9rem;">
-                    <i class="fas fa-envelope me-2" 
-                       style="color:#1a73e8;"></i>
-                    contact@cabinet.tn
-                </p>
-                <p style="font-size:0.9rem;">
-                    <i class="fas fa-clock me-2" 
-                       style="color:#1a73e8;"></i>
-                    Lun-Sam : 8h00 - 18h00
-                </p>
+                <p><i class="fas fa-map-marker-alt footer-icon"></i>Tunis, Tunisie</p>
+                <p><i class="fas fa-phone footer-icon"></i>+216 71 000 000</p>
+                <p><i class="fas fa-envelope footer-icon"></i>contact@cabinet.tn</p>
+                <p><i class="fas fa-clock footer-icon"></i>Lun-Sam : 8h00 - 18h00</p>
             </div>
         </div>
         <div class="footer-bottom">
-            © 2025 Cabinet Médical — FST Master STR — 
-            Tous droits réservés
+            © 2025 Cabinet Médical — FST Master STR — Tous droits réservés
         </div>
     </div>
 </footer>
